@@ -16,10 +16,11 @@ import java.math.BigDecimal;
 public class Bet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long betId;
 
     @OneToOne
-    private User user;
+    @JoinColumn(name = "user2_id")
+    private Customer user;
 
     private String matchId;
 

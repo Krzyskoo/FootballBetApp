@@ -97,7 +97,7 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.4.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.4.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.mysql:mysql-connector-j:9.1.0" level="project" />
-    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.36" level="project" />
+    <orderEntry type="library" name="Maven: org.project-lombok:lombok:1.18.36" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:3.4.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test:3.4.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test-autoconfigure:3.4.3" level="project" />
