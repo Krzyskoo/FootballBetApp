@@ -52,6 +52,7 @@ public class ProjectSecurityConfig {
                 .addFilterAfter(new JwtTokenGenerationFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/secured").authenticated()
                         .requestMatchers("/register","/login").permitAll());
         return http.build();
     }
