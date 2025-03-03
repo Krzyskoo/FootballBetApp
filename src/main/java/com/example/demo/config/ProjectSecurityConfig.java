@@ -36,7 +36,7 @@ public class ProjectSecurityConfig {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Collections.singletonList("https://localhost:4200"));
+                        config.setAllowedOrigins(Collections.singletonList("https://api.the-odds-api.com/v4"));
                         config.setAllowedMethods(Collections.singletonList("*"));
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
@@ -52,7 +52,7 @@ public class ProjectSecurityConfig {
                 .addFilterAfter(new JwtTokenGenerationFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/secured").authenticated()
+                        .requestMatchers("/secured","/sports","/event/**","/event/odds/**").authenticated()
                         .requestMatchers("/register","/login").permitAll());
         return http.build();
     }

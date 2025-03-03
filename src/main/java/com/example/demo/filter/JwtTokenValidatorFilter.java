@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,7 +29,8 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
         if(null != jwt) {
             try {
-                String secret = "293af56150e31fe628fa2296db47045a";
+                Environment env = getEnvironment();
+                String secret = env.getProperty(ApplicationConstans.JWT_SECRET_KEY);
                 SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
                     if(null !=secretKey) {
                         Claims claims = Jwts.parser().verifyWith(secretKey)

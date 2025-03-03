@@ -1,18 +1,21 @@
 package com.example.demo.services;
 
+import com.example.demo.constans.ApplicationConstans;
 import com.example.demo.model.Customer;
 import com.example.demo.repo.CustomerRepo;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,16 +24,20 @@ public class CustomerService {
     private final CustomerRepo customerRepo;
 
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private Environment env;
 
-    public CustomerService(CustomerRepo customerRepo, AuthenticationManager authenticationManager) {
+
+    public CustomerService(CustomerRepo customerRepo, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, Environment env) {
         this.customerRepo = customerRepo;
         this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+        this.env = env;
     }
 
-    @Value("${SecretKey}")
-    private String secret;
 
     public String generateJWTToken(String username, String password) {
+        String secret = env.getProperty(ApplicationConstans.JWT_SECRET_KEY);
         String jwt = "";
         Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(username,
                 password);
@@ -50,6 +57,9 @@ public class CustomerService {
     }
 
     public Customer save(Customer user) {
+        String hasPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hasPassword);
+        user.setCreatedDt(new Date(System.currentTimeMillis()));
         return customerRepo.save(user);
     }
 }
