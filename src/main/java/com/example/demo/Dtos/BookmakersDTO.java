@@ -21,8 +21,8 @@ public class BookmakersDTO {
     @JsonProperty("last_update")
     private Date lastUpdate;
 
-    @JsonProperty("markets")
-    private List<Market> markets;
+    @JsonProperty("marketDTOS")
+    private List<MarketDTO> marketDTOS;
 
     public String getKey() {
         return key;
@@ -48,11 +48,11 @@ public class BookmakersDTO {
         this.lastUpdate = lastUpdate;
     }
 
-    public List<Market> getMarkets() {
-        return markets;
+    public List<MarketDTO> getMarketDTOS() {
+        return marketDTOS;
     }
 
-    public void setMarkets(List<Market> markets) {
-        this.markets = markets;
+    public void setMarketDTOS(List<MarketDTO> marketDTOS) {
+        this.marketDTOS = marketDTOS;
     }
 }

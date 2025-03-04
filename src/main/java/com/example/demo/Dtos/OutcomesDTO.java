@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Outcomes {
+public class OutcomesDTO {
     @JsonProperty("name")
     private String name;
     @JsonProperty("price")

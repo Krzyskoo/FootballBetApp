@@ -8,13 +8,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Market {
+public class MarketDTO {
     @JsonProperty("key")
     private String key;
     @JsonProperty("last_update")
     private String lastUpdate;
     @JsonProperty("outcomes")
-    private List<Outcomes> outcomes;
+    private List<OutcomesDTO> outcomes;
 
     public String getKey() {
         return key;
@@ -32,11 +32,11 @@ public class Market {
         this.lastUpdate = lastUpdate;
     }
 
-    public List<Outcomes> getOutcomes() {
+    public List<OutcomesDTO> getOutcomes() {
         return outcomes;
     }
 
-    public void setOutcomes(List<Outcomes> outcomes) {
+    public void setOutcomes(List<OutcomesDTO> outcomes) {
         this.outcomes = outcomes;
     }
 }
