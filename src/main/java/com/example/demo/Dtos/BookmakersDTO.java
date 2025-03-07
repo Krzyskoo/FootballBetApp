@@ -4,14 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class BookmakersDTO {
 
     @JsonProperty("key")
@@ -21,7 +19,7 @@ public class BookmakersDTO {
     @JsonProperty("last_update")
     private Date lastUpdate;
 
-    @JsonProperty("marketDTOS")
+    @JsonProperty("markets")
     private List<MarketDTO> marketDTOS;
 
     public String getKey() {

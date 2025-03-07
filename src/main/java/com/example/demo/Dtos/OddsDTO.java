@@ -8,7 +8,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class OddsDTO{
 
     @JsonProperty("id")

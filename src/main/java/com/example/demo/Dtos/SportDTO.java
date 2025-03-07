@@ -3,10 +3,8 @@ package com.example.demo.Dtos;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class SportDTO {
     private String key;
     private boolean active;

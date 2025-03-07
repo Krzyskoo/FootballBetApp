@@ -7,7 +7,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class MarketDTO {
     @JsonProperty("key")
     private String key;
