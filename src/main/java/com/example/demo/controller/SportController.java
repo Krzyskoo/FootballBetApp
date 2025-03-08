@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.Dtos.EventsDTO;
 import com.example.demo.Dtos.OddsDTO;
 import com.example.demo.Dtos.ScoreDTO;
 import com.example.demo.Dtos.SportDTO;
@@ -30,11 +29,14 @@ public class SportController {
     public List<SportDTO> getMessagesByStatus(){
         return proxy.getSports(env.getProperty(ApplicationConstans.SPORT_API_KEY));
     }
+    /*
     @GetMapping("/event/{sport}")
     public List<EventsDTO> getEvents(@PathVariable String sport) {
 
         return proxy.getEvents(env.getProperty(ApplicationConstans.SPORT_API_KEY),sport);
     }
+    /*
+     */
     @GetMapping("/event/odds/{sport}")
     List<OddsDTO> getOdds(@PathVariable("sport") String sport,
                           @RequestParam("regions") String regions,

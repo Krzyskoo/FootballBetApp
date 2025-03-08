@@ -52,7 +52,7 @@ public class ProjectSecurityConfig {
                 .addFilterAfter(new JwtTokenGenerationFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/secured","/sports","/event/**","/event/odds/**").authenticated()
+                        .requestMatchers("/secured","/sports","/event/**","/event/odds/**","/bet/**").authenticated()
                         .requestMatchers("/register","/login").permitAll());
         return http.build();
     }
