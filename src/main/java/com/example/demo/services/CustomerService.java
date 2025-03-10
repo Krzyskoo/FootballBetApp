@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,14 @@ public class CustomerService {
         }
         return jwt;
     }
+    public Long getAuthenticatedUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+        return customerRepo.findByEmail(authentication.getName()).get().getId();
+    }
 
     public Customer save(Customer user) {
         String hasPassword = passwordEncoder.encode(user.getPassword());
@@ -62,4 +71,9 @@ public class CustomerService {
         user.setCreatedDt(new Date(System.currentTimeMillis()));
         return customerRepo.save(user);
     }
+
+    public Customer findById(Long id) {
+        return customerRepo.findById(id).orElse(null);
+    }
+
 }

@@ -2,15 +2,19 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@Builder
 public class Customer {
 
     @Id
@@ -19,53 +23,16 @@ public class Customer {
     private Long id;
     private String email;
     private String password;
+    private BigDecimal balance;
+    @OneToMany(mappedBy = "customer")
+    private List<Payment> payments;
     @JsonIgnore
     private Date createdDt;
-    @OneToMany(mappedBy ="user2_id",fetch = FetchType.EAGER)
-    @JsonIgnore
-    public Set<Authority> getAuthorities() {
-        return authorities;
-    }
+
 
 
     @OneToMany(mappedBy ="customer",fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<Authority> authorities;
-
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getCreatedDt() {
-        return createdDt;
-    }
-
-    public void setCreatedDt(Date createdDt) {
-        this.createdDt = createdDt;
-    }
 
 }
