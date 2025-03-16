@@ -12,9 +12,11 @@ import java.util.Optional;
 public class PaymentService {
 
     private final PaymentRepo paymentRepo;
+    private final CustomerService customerService;
 
-    public PaymentService(PaymentRepo paymentRepo) {
+    public PaymentService(PaymentRepo paymentRepo, CustomerService customerService) {
         this.paymentRepo = paymentRepo;
+        this.customerService = customerService;
     }
 
     @Transactional
@@ -31,13 +33,17 @@ public class PaymentService {
         paymentRepo.save(savedPayment);
 
     }
-    public void updatePaymentStatus(String stripePaymentId) {
-        Optional<Payment> paymentOpt = paymentRepo.findByStripePaymentId(stripePaymentId);
-        if (paymentOpt.isPresent()) {
+    public void finalUpdatePaymentStatus(String paymentIdInDatabase, String paymentId) {
+        Optional<Payment> paymentOpt = paymentRepo.findById(Long.parseLong(paymentIdInDatabase));
+        if (paymentOpt.isPresent()&& paymentOpt.get().getStatus().toString().equals("PENDING")) {
             Payment payment = paymentOpt.get();
+            payment.setStripePaymentId(paymentId);
             payment.setStatus(PaymentStatus.SUCCEEDED);
             paymentRepo.save(payment);
+            customerService.updateBalance(payment.getCustomer().getId(), payment.getAmount());
         }
+
+
 
     }
 }

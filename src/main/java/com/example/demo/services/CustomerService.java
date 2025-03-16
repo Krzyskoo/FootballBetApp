@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -74,6 +75,15 @@ public class CustomerService {
 
     public Customer findById(Long id) {
         return customerRepo.findById(id).orElse(null);
+    }
+
+    public void updateBalance(Long id, BigDecimal balance) {
+        Customer customer = customerRepo.findById(id).orElse(null);
+        if (customer != null) {
+
+            customer.setBalance(customer.getBalance().add(balance));
+            customerRepo.save(customer);
+        }
     }
 
 }
