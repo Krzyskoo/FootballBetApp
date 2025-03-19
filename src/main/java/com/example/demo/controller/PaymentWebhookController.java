@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.repo.PaymentRepo;
 import com.example.demo.services.PaymentService;
 import com.example.demo.services.StripeService;
+import com.stripe.exception.StripeException;
 import com.stripe.model.Event;
 import com.stripe.net.Webhook;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,14 +30,11 @@ public class PaymentWebhookController {
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleWebhook(@RequestBody String payload,
-                                                @RequestHeader("Stripe-Signature") String sigHeader) {
-        try {
+                                                @RequestHeader("Stripe-Signature") String sigHeader) throws StripeException {
+
             Event stripeEvent = Webhook.constructEvent(payload, sigHeader, stripeWebhookSecret);
             return stripeService.handleWebhook(stripeEvent);
 
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body("Invalid signature");
-        }
         /*
         String eventType = (String) payload.get("type");
 
@@ -45,7 +43,7 @@ public class PaymentWebhookController {
             Map<String, Object> object = (Map<String, Object>) data.get("object");
             String stripePaymentId = (String) object.get("id");
             String stripeDatabaseId = (String) data.get("metadata");
-            paymentService.finalUpdatePaymentStatus(stripePaymentId);
+            paymentService.updatePaymentStatus(stripePaymentId);
         }
         /*
          */

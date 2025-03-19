@@ -3,7 +3,6 @@ package com.example.demo.services;
 import com.example.demo.model.Payment;
 import com.example.demo.model.PaymentStatus;
 import com.example.demo.repo.PaymentRepo;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,31 +18,28 @@ public class PaymentService {
         this.customerService = customerService;
     }
 
-    @Transactional
     public void savePayment(Payment payment) {
-        Payment savedPayment = Payment.builder()
-                .stripePaymentId(payment.getStripePaymentId())
-                .amount(payment.getAmount())
-                .currency(payment.getCurrency())
-                .status(PaymentStatus.PENDING)
-                .customer(payment.getCustomer())
-                .customerEmail(payment.getCustomerEmail())
-                .paymentMethod("card")
-                .build();
-        paymentRepo.save(savedPayment);
+        paymentRepo.save(payment);
 
     }
-    public void finalUpdatePaymentStatus(String paymentIdInDatabase, String paymentId) {
+    public void updatePaymentStatus(String paymentIdInDatabase, String paymentId, String stripeEventType) {
         Optional<Payment> paymentOpt = paymentRepo.findById(Long.parseLong(paymentIdInDatabase));
-        if (paymentOpt.isPresent()&& paymentOpt.get().getStatus().toString().equals("PENDING")) {
+        if (paymentOpt.isPresent() &&
+                paymentOpt.get().getStatus().toString().equals("PENDING")&&
+                stripeEventType.equals("checkout.session.completed")) {
             Payment payment = paymentOpt.get();
             payment.setStripePaymentId(paymentId);
+            paymentRepo.save(payment);
+        } else if (paymentOpt.isPresent() &&
+                paymentOpt.get().getStatus().toString().equals("PENDING")
+                && stripeEventType.equals("payment_intent.succeeded")) {
+            Payment payment = paymentOpt.get();
             payment.setStatus(PaymentStatus.SUCCEEDED);
             paymentRepo.save(payment);
-            customerService.updateBalance(payment.getCustomer().getId(), payment.getAmount());
+            customerService.updateBalance(paymentOpt.get().getCustomer().getId(), payment.getAmount());
+
         }
 
-
-
     }
+
 }

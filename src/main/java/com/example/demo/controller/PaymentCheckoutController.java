@@ -26,15 +26,11 @@ public class PaymentCheckoutController {
     }
 
     @PostMapping("/create-payment-intent")
-    public ResponseEntity<Map<String, String>> createCheckoutSession(@RequestBody Map<String, Object> request) {
-        try {
+    public ResponseEntity<Map<String, String>> createCheckoutSession(@RequestBody Map<String, Object> request) throws StripeException {
             long amount = ((Number) request.get("amount")).longValue();
             String currency = (String) request.get("currency");
             String checkoutUrl = stripeService.createCheckoutUrl(amount, currency);
             return ResponseEntity.ok(Map.of("checkout_url", checkoutUrl));
-        } catch (StripeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
     }
     @GetMapping("/index")
     public String index(){

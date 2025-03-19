@@ -6,6 +6,7 @@ import com.example.demo.model.PaymentStatus;
 import com.example.demo.repo.PaymentRepo;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Event;
+import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,10 @@ public class StripeService {
                                 .build()
                 )
                 .putMetadata("payment_id", paymentId)
+                .setPaymentIntentData(
+                        SessionCreateParams.PaymentIntentData.builder()
+                                .putMetadata("payment_id", paymentId)
+                                .build())
                 .build();
 
         Session session = Session.create(params);
@@ -76,29 +81,63 @@ public class StripeService {
 
     public ResponseEntity<String> handleWebhook(Event stripeEvent) throws StripeException {
 
-        if (stripeEvent.getType().equals("checkout.session.completed")) {
-            Session session = (Session) stripeEvent.getData().getObject();
-            if (session == null) {
-                return ResponseEntity.badRequest().body("No session data in event");
-            }
+        // Pobranie typu eventu
+        String eventType = stripeEvent.getType();
 
-            System.out.println("Session ID: " + session.getId());
-            System.out.println("Session Metadata: " + session.getMetadata());
-
-            // Pobranie metadanych i PaymentIntent ID
-            String paymentIdInDatabase = session.getMetadata().get("payment_id");
-            String paymentId = session.getPaymentIntent();
-
-            if (paymentIdInDatabase == null || paymentId == null) {
-                return ResponseEntity.badRequest().body("Missing metadata in session");
-            }
-
-            paymentService.finalUpdatePaymentStatus(paymentIdInDatabase, paymentId);
-            return ResponseEntity.ok("OK");
-
-
+        if ("checkout.session.completed".equals(eventType)) {
+            return handleCheckoutSessionCompleted(stripeEvent);
+        } else if ("payment_intent.succeeded".equals(eventType)) {
+            return handlePaymentIntentSucceeded(stripeEvent);
         }
+
         return ResponseEntity.ok("OK");
     }
 
+    // Metoda do obsługi checkout.session.completed
+    private ResponseEntity<String> handleCheckoutSessionCompleted(Event stripeEvent) {
+
+        Session session = (Session) stripeEvent.getData().getObject();
+        if (session == null) {
+            return ResponseEntity.badRequest().body("No session data in event");
+        }
+
+        String paymentIdInDatabase = session.getMetadata().get("payment_id");
+        String paymentId = session.getPaymentIntent();
+
+        System.out.println("Session ID: " + session.getId());
+        System.out.println("Session Metadata: " + session.getMetadata());
+
+
+
+
+        if (paymentIdInDatabase == null || paymentId == null) {
+            return ResponseEntity.badRequest().body("Missing metadata in session");
+        }
+
+        paymentService.updatePaymentStatus(paymentIdInDatabase, paymentId, "checkout.session.completed");
+
+        return ResponseEntity.ok("OK");
+    }
+
+    // Metoda do obsługi payment_intent.succeeded
+    private ResponseEntity<String> handlePaymentIntentSucceeded(Event stripeEvent) {
+        PaymentIntent paymentIntent = (PaymentIntent) stripeEvent.getData().getObject();
+        if (paymentIntent == null) {
+            return ResponseEntity.badRequest().body("No payment intent data in event");
+        }
+
+        System.out.println("PaymentIntent ID: " + paymentIntent.getId());
+        System.out.println("Metadata: " + paymentIntent.getMetadata());
+
+        // Pobranie Payment ID zapisane w metadanych
+        String paymentIdInDatabase = paymentIntent.getMetadata().get("payment_id");
+
+        if (paymentIdInDatabase == null) {
+            return ResponseEntity.badRequest().body("Missing payment_id in metadata");
+        }
+
+        paymentService.updatePaymentStatus(paymentIdInDatabase, paymentIntent.getId(), "payment_intent.succeeded");
+
+        return ResponseEntity.ok("OK");
+    }
 }
