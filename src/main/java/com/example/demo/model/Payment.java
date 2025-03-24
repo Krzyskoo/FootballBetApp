@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,6 +31,7 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(name = "customer_id",nullable = false)
+    @JsonBackReference
     private Customer customer;      // ID użytkownika w systemie
     private String customerEmail;        // E-mail użytkownika
 

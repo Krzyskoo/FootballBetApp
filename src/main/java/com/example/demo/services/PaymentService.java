@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.model.Payment;
 import com.example.demo.model.PaymentStatus;
 import com.example.demo.repo.PaymentRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class PaymentService {
         paymentRepo.save(payment);
 
     }
+    @Transactional
     public void updatePaymentStatus(String paymentIdInDatabase, String paymentId, String stripeEventType) {
         Optional<Payment> paymentOpt = paymentRepo.findById(Long.parseLong(paymentIdInDatabase));
         if (paymentOpt.isPresent() &&
