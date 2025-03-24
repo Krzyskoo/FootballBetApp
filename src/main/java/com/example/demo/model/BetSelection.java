@@ -1,10 +1,8 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -13,27 +11,27 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BetSelection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // do jakiego kuponu należy
     @ManyToOne
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
+    @ManyToOne
+    @JoinColumn(name = "bet_id", nullable = false)
+    @JsonBackReference
     private Bet bet;
 
-    private String homeTeam;
-    private String awayTeam;
+    @Column(nullable = false)
     private BigDecimal lockedOdds; // 1.90
-
-    // kluczowe informacje o meczu
-    @OneToOne
-    @JoinColumn(name = "event_id")
-    private Event eventId;       // match id
 
     @Enumerated(EnumType.STRING)
     private Result predictedResult;
 
     private boolean completed;
+
+
 
 }

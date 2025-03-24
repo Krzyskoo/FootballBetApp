@@ -81,7 +81,7 @@ public class CustomerService {
         Customer customer = customerRepo.findById(id).orElse(null);
         if (customer != null) {
 
-            customer.setBalance(customer.getBalance().add(balance));
+            customer.setBalance(BigDecimal.ZERO.add(balance));
             customerRepo.save(customer);
         }
     }

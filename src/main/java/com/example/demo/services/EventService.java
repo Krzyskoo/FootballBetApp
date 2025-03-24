@@ -7,6 +7,7 @@ import com.example.demo.constans.ApplicationConstans;
 import com.example.demo.model.Event;
 import com.example.demo.model.Result;
 import com.example.demo.proxy.SportApiProxy;
+import com.example.demo.repo.EventRepo;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,12 @@ import java.util.stream.Collectors;
 public class EventService {
     private final SportApiProxy proxy;
     private final Environment env;
+    private final EventRepo eventRepo;
 
-    public EventService(SportApiProxy proxy, Environment env) {
+    public EventService(SportApiProxy proxy, Environment env, EventRepo eventRepo) {
         this.proxy = proxy;
         this.env = env;
+        this.eventRepo = eventRepo;
     }
 
     public List<Event> getEventsForSports(String sport) {
@@ -32,7 +35,16 @@ public class EventService {
                ApplicationConstans.SPORT_REGION,
                ApplicationConstans.SPORRT_MARKET);
        Map<String, Map<String,String>> extractOdds = extractOdds(getEventOdds);
-       return getEventInfo.stream().map(event -> buildFullEvent(event, extractOdds)).collect(Collectors.toList());
+
+       return getEventInfo.stream()
+               .map(event -> {
+                  Event builtEvent = buildFullEvent(event, extractOdds);
+                   if (!eventRepo.existsByEventId(builtEvent.getEventId())) {
+                       eventRepo.save(builtEvent);
+                   }
+                   return builtEvent;
+               })
+               .collect(Collectors.toList());
     }
     private Event buildFullEvent(EventsDTO eventBase, Map<String, Map<String, String>> oddsMap) {
         // 🔹 Pobieramy kursy dla eventId

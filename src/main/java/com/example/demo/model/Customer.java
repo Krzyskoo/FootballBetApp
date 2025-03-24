@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,9 +23,11 @@ public class Customer {
     @Column(name = "customer_id")
     private Long id;
     private String email;
+
     private String password;
     private BigDecimal balance;
     @OneToMany(mappedBy = "customer")
+    @JsonManagedReference
     private List<Payment> payments;
     @JsonIgnore
     private Date createdDt;

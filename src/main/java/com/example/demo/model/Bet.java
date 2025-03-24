@@ -1,11 +1,9 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
@@ -18,13 +16,15 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Bet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long betId;
 
-    @OneToOne
-    @JoinColumn(name = "user2_id")
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    @JsonIgnore
     private Customer user;
 
     private BigDecimal totalOdds;
@@ -37,6 +37,7 @@ public class Bet {
     private Date createdDt;
 
     @OneToMany(mappedBy = "bet", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<BetSelection> selections = new  ArrayList<>();
 
 }

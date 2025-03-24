@@ -25,6 +25,11 @@ public interface SportApiProxy {
     @Headers(value = "Content-Type: application/json")
     List<EventsDTO> getEvents(@RequestParam("apiKey") String apiKey, @PathVariable("sport") String sport);
 
+    @RequestMapping(method = RequestMethod.GET, value = "sports/{sport}/events/{eventId}/odds")
+    @Headers(value = "Content-Type: application/json")
+    OddsDTO getEventOdds(@RequestParam("apiKey") String apiKey, @PathVariable("sport") String sport,
+                               @PathVariable("eventId") String eventId);
+
     @RequestMapping(method = RequestMethod.GET, value = "sports/{sport}/odds")
     @Headers(value = "Content-Type: application/json")
     List<OddsDTO> getOdds(@PathVariable("sport") String sport,

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,8 +29,8 @@ public class Event {
     private boolean completed;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "eventId")
-    private BetSelection betSelection;
+    @OneToMany(mappedBy = "event")
+    private List<BetSelection> betSelection;
 
     @Builder
     public Event(String eventId, String sportKey, String sportTitle, Date startTime,

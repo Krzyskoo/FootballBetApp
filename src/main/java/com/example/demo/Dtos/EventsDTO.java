@@ -7,6 +7,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class EventsDTO {
 
     @JsonProperty("id")
@@ -22,51 +24,4 @@ public class EventsDTO {
     @JsonProperty("away_team")
     private String awayTeam;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSportKey() {
-        return sportKey;
-    }
-
-    public void setSportKey(String sportKey) {
-        this.sportKey = sportKey;
-    }
-
-    public String getSportTitle() {
-        return sportTitle;
-    }
-
-    public void setSportTitle(String sportTitle) {
-        this.sportTitle = sportTitle;
-    }
-
-    public Date getCommenceTime() {
-        return commenceTime;
-    }
-
-    public void setCommenceTime(Date commenceTime) {
-        this.commenceTime = commenceTime;
-    }
-
-    public String getHomeTeam() {
-        return homeTeam;
-    }
-
-    public void setHomeTeam(String homeTeam) {
-        this.homeTeam = homeTeam;
-    }
-
-    public String getAwayTeam() {
-        return awayTeam;
-    }
-
-    public void setAwayTeam(String awayTeam) {
-        this.awayTeam = awayTeam;
-    }
 }

@@ -59,14 +59,14 @@ public class ProjectSecurityConfig {
                     }
                 }))
                 .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
-                        .ignoringRequestMatchers( "/contact","/register", "/login","/webhook","/create-payment-intent")
+                        .ignoringRequestMatchers( "/contact","/register", "/login","/webhook","/create-payment-intent","bets/**")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new JwtTokenGenerationFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/secured","/sports","/event/**","/event/odds/**","/bet/**","/index","/create-payment-intent").authenticated()
-                        .requestMatchers("/register","/login","/webhook").permitAll());
+                        .requestMatchers("/register","/login","/webhook","bets/**").permitAll());
         return http.build();
     }
 
