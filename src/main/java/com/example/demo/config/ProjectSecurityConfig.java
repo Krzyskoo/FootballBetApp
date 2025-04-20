@@ -49,7 +49,7 @@ public class ProjectSecurityConfig {
                     @Override
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Collections.singletonList("*"));
+                        config.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                         config.setAllowedMethods(Collections.singletonList("*"));
                         config.setAllowCredentials(true);
                         config.setAllowedHeaders(Collections.singletonList("*"));
@@ -59,13 +59,13 @@ public class ProjectSecurityConfig {
                     }
                 }))
                 .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
-                        .ignoringRequestMatchers( "/contact","/register", "/login","/webhook","/create-payment-intent","bets/**")
+                        .ignoringRequestMatchers( "/contact","/register", "/login","/webhook","/create-payment-intent","bets/place/**")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new JwtTokenGenerationFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/secured","/sports","/event/**","/event/odds/**","/bet/**","/index","/create-payment-intent").authenticated()
+                        .requestMatchers("/secured","/sports","/event/**","/event/odds/**","/bet/**","/index","/create-payment-intent","/customer").authenticated()
                         .requestMatchers("/register","/login","/webhook","bets/**").permitAll());
         return http.build();
     }
