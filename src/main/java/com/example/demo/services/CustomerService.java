@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.Dtos.CustomerDTO;
 import com.example.demo.constans.ApplicationConstans;
 import com.example.demo.model.Customer;
 import com.example.demo.repo.CustomerRepo;
@@ -67,10 +68,13 @@ public class CustomerService {
     }
 
     public Customer save(Customer user) {
-        String hasPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(hasPassword);
-        user.setCreatedDt(new Date(System.currentTimeMillis()));
-        return customerRepo.save(user);
+        if (customerRepo.findByEmail(user.getEmail()).isEmpty()){
+            String hasPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(hasPassword);
+            user.setCreatedDt(new Date(System.currentTimeMillis()));
+            return customerRepo.save(user);
+        }else throw new IllegalArgumentException("Email already exists");
+
     }
 
     public Customer findById(Long id) {
@@ -80,10 +84,16 @@ public class CustomerService {
     public void updateBalance(Long id, BigDecimal balance) {
         Customer customer = customerRepo.findById(id).orElse(null);
         if (customer != null) {
-
-            customer.setBalance(BigDecimal.ZERO.add(balance));
+            customer.setBalance(customer.getBalance().add(balance));
             customerRepo.save(customer);
         }
+    }
+    public CustomerDTO getCustomer() {
+        return customerRepo.findById(getAuthenticatedUsername())
+                .map(customer -> new CustomerDTO(
+                        customer.getEmail(),
+                        customer.getBalance()))
+                .orElse(null);
     }
 
 }
