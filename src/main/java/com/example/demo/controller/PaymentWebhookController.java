@@ -35,19 +35,6 @@ public class PaymentWebhookController {
             Event stripeEvent = Webhook.constructEvent(payload, sigHeader, stripeWebhookSecret);
             return stripeService.handleWebhook(stripeEvent);
 
-        /*
-        String eventType = (String) payload.get("type");
-
-        if ("checkout.session.completed".equals(eventType)) {
-            Map<String, Object> data = (Map<String, Object>) payload.get("data");
-            Map<String, Object> object = (Map<String, Object>) data.get("object");
-            String stripePaymentId = (String) object.get("id");
-            String stripeDatabaseId = (String) data.get("metadata");
-            paymentService.updatePaymentStatus(stripePaymentId);
-        }
-        /*
-         */
-
     }
 
 }
