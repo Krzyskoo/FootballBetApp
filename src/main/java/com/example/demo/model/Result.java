@@ -4,5 +4,7 @@ public enum Result {
     HOME_WIN,
     AWAY_WIN,
     DRAW,
-    PENDING
+    PENDING,
+    WIN,
+    LOST
 }

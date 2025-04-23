@@ -29,14 +29,6 @@ public class SportController {
     public List<SportDTO> getMessagesByStatus(){
         return proxy.getSports(env.getProperty(ApplicationConstans.SPORT_API_KEY));
     }
-    /*
-    @GetMapping("/event/{sport}")
-    public List<EventsDTO> getEvents(@PathVariable String sport) {
-
-        return proxy.getEvents(env.getProperty(ApplicationConstans.SPORT_API_KEY),sport);
-    }
-    /*
-     */
     @GetMapping("/event/odds/{sport}")
     List<OddsDTO> getOdds(@PathVariable("sport") String sport,
                           @RequestParam("regions") String regions,
@@ -46,7 +38,7 @@ public class SportController {
 
     @GetMapping("/event/sport/{sport}/score")
     List<ScoreDTO> getScore(@PathVariable("sport") String sport){
-        return proxy.getScore(sport, env.getProperty(ApplicationConstans.SPORT_API_KEY));
+        return proxy.getScore(sport, env.getProperty(ApplicationConstans.SPORT_API_KEY),1);
     }
 
 }

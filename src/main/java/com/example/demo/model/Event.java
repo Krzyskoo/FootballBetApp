@@ -24,9 +24,13 @@ public class Event {
     private String homeTeamOdds;
     private String awayTeam;
     private String awayTeamOdds;
+    private String drawOdds;
     @Enumerated(EnumType.STRING)
     private Result status;
     private boolean completed;
+    @OneToOne
+    @JoinColumn(name = "score_id")
+    private Score score;
 
     @JsonIgnore
     @OneToMany(mappedBy = "event")

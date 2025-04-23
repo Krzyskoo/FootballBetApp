@@ -5,7 +5,6 @@ import com.example.demo.services.CustomerService;
 import com.example.demo.services.StripeService;
 import com.stripe.exception.StripeException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,14 +30,5 @@ public class PaymentCheckoutController {
             String currency = (String) request.get("currency");
             String checkoutUrl = stripeService.createCheckoutUrl(amount, currency);
             return ResponseEntity.ok(Map.of("checkout_url", checkoutUrl));
-    }
-    @GetMapping("/index")
-    public String index(){
-        return "udało sie";
-    }
-
-    @GetMapping("/success")
-    public String success(){
-        return "success";
     }
 }

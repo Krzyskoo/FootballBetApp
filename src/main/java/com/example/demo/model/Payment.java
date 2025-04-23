@@ -22,20 +22,20 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String stripePaymentId;  // ID Stripe, np. pi_12345
-    private BigDecimal amount;       // Kwota np. 100.00 USD
-    private String currency;         // np. "USD"
+    private String stripePaymentId;
+    private BigDecimal amount;
+    private String currency;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus status;    // "PENDING", "SUCCEEDED", "FAILED"
+    private PaymentStatus status;
 
     @ManyToOne
     @JoinColumn(name = "customer_id",nullable = false)
     @JsonBackReference
-    private Customer customer;      // ID użytkownika w systemie
-    private String customerEmail;        // E-mail użytkownika
+    private Customer customer;
+    private String customerEmail;
 
-    private String paymentMethod;    // "card", "google_pay", "link"
+    private String paymentMethod;
 
     @CreationTimestamp
     @JsonIgnore

@@ -14,11 +14,8 @@ public class FootballAppAuthenticationProvider implements AuthenticationProvider
 
 
     private final UserDetailsService userDetailsService;
-    private final PasswordEncoder passwordEncoder;
-
     public FootballAppAuthenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override

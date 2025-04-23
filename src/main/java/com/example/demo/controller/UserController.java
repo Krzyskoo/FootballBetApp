@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.Dtos.CustomerDTO;
 import com.example.demo.constans.ApplicationConstans;
 import com.example.demo.model.Customer;
 import com.example.demo.model.LoginRequestDTO;
@@ -42,8 +43,8 @@ public class UserController {
                 .body(new LoginResponseDTO(HttpStatus.OK.getReasonPhrase(), jwt));
     }
 
-    @GetMapping("/secured")
-    public ResponseEntity<String> securedEndpoint() {
-        return ResponseEntity.status(HttpStatus.OK).body("Secured endpoint accessed successfully");
+    @GetMapping("/customer")
+    public ResponseEntity<CustomerDTO> securedEndpoint() {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.getCustomer());
     }
 }

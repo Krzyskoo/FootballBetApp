@@ -30,6 +30,8 @@ public class BetSelection {
     @Enumerated(EnumType.STRING)
     private Result predictedResult;
 
+    private boolean isWon;
+
     private boolean completed;
 
 

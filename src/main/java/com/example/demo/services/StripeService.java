@@ -30,8 +30,8 @@ public class StripeService {
 
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("https://your-website.com/success")
-                .setCancelUrl("https://your-website.com/cancel")
+                .setSuccessUrl("http://localhost:4200/payment-success")
+                .setCancelUrl("http://localhost:4200/payment-cancel")
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .addLineItem(
                         SessionCreateParams.LineItem.builder()

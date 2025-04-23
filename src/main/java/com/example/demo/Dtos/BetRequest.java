@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BetRequest {
-    private Long customerId;
     private BigDecimal amount;
     private List<BetSelectionRequest> selections;
 

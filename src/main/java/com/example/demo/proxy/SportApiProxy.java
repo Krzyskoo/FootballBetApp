@@ -25,10 +25,13 @@ public interface SportApiProxy {
     @Headers(value = "Content-Type: application/json")
     List<EventsDTO> getEvents(@RequestParam("apiKey") String apiKey, @PathVariable("sport") String sport);
 
-    @RequestMapping(method = RequestMethod.GET, value = "sports/{sport}/events/{eventId}/odds")
+    @RequestMapping(method = RequestMethod.GET, value = "sports/{sport}/odds")
     @Headers(value = "Content-Type: application/json")
-    OddsDTO getEventOdds(@RequestParam("apiKey") String apiKey, @PathVariable("sport") String sport,
-                               @PathVariable("eventId") String eventId);
+    List<OddsDTO> updateEmptyEventOdds(@PathVariable("sport") String sport,
+                                 @RequestParam("apiKey") String apiKey,
+                                 @RequestParam("regions") String regions,
+                                 @RequestParam(value = "markets",required = false) String markets,
+                                 @RequestParam("eventIds") String eventIds);
 
     @RequestMapping(method = RequestMethod.GET, value = "sports/{sport}/odds")
     @Headers(value = "Content-Type: application/json")
@@ -39,5 +42,6 @@ public interface SportApiProxy {
     @RequestMapping(method = RequestMethod.GET, value = "sports/{sport}/scores")
     @Headers(value = "Content-Type: application/json")
     List<ScoreDTO> getScore(@PathVariable("sport") String sport,
-                            @RequestParam("apiKey") String apiKey);
+                            @RequestParam("apiKey") String apiKey,
+                            @RequestParam("daysFrom") int daysFrom);
 }
