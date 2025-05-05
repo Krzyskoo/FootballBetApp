@@ -19,12 +19,9 @@ public interface EventRepo extends JpaRepository<Event, String> {
     Set<String> findSportKeysByEventCompleted();
     List<Event> findAllByCompleted(boolean completed);
 
-    @Query(value = "select e from Event e where e.awayTeamOdds is null or e.homeTeamOdds is null or e.drawOdds is null")
-    Set<Event> findEventByEmptyOdds();
-
     @Query(value = "SELECT sport_key, GROUP_CONCAT(event_id SEPARATOR ',') AS ids " +
             "FROM event " +
-            "WHERE away_team_odds = '' AND home_team_odds = '' AND draw_odds = '' or draw_odds='0' " +
+            "WHERE away_team_odds ='' AND home_team_odds = '' AND draw_odds =''" +
             "GROUP BY sport_key",
             nativeQuery = true)
     List<Object[]> getIdsGroupedBySportKey();

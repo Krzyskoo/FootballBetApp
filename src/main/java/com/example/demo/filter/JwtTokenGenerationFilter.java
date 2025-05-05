@@ -1,6 +1,6 @@
 package com.example.demo.filter;
 
-import com.example.demo.constans.ApplicationConstans;
+import com.example.demo.constants.ApplicationConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
@@ -29,7 +29,7 @@ public class JwtTokenGenerationFilter extends OncePerRequestFilter {
         if (null != authentication) {
             Environment env = getEnvironment();
             if (null != env) {
-                String secret = env.getProperty(ApplicationConstans.JWT_SECRET_KEY);
+                String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY);
                 SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
                 String jwt = Jwts.builder().issuer("FootballBetApp").subject("JWT Token")
                         .claim("username", authentication.getName())
@@ -38,7 +38,7 @@ public class JwtTokenGenerationFilter extends OncePerRequestFilter {
                         .issuedAt(new Date())
                         .expiration(new Date((new Date()).getTime() + 300000000))
                         .signWith(secretKey).compact();
-                response.addHeader(ApplicationConstans.JWT_HEADER, jwt);
+                response.addHeader(ApplicationConstants.JWT_HEADER, jwt);
             }
 
         }

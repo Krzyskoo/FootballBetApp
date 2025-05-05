@@ -3,7 +3,10 @@ package com.example.demo.service;
 import com.example.demo.Dtos.CustomerDTO;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.model.Customer;
+import com.example.demo.model.TransactionType;
+import com.example.demo.repo.BalanceHistoryRepo;
 import com.example.demo.repo.CustomerRepo;
+import com.example.demo.services.BalanceHistoryService;
 import com.example.demo.services.CustomerService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +44,11 @@ public class CustomerServiceTest {
 
     @Mock
     private Environment env;
+    @Mock
+    private BalanceHistoryRepo balanceHistoryRepo;
+
+    @InjectMocks
+    private BalanceHistoryService balanceHistoryService;
 
     @InjectMocks
     private CustomerService customerService;
@@ -83,7 +91,9 @@ public class CustomerServiceTest {
 
         when(customerRepo.findById(1L)).thenReturn(Optional.of(customer));
 
-        customerService.updateBalance(1L, new BigDecimal("50.00"));
+        customer= customerRepo.findById(1L).orElse(null);
+        BigDecimal balance = customer.getBalance();
+        balanceHistoryService.saveBalanceChange(customer, TransactionType.DEPOSIT, new BigDecimal("50.00"),"TestDeposit");
 
         assertEquals(new BigDecimal("150.00"), customer.getBalance());
         verify(customerRepo).save(customer);

@@ -3,14 +3,13 @@ package com.example.demo.service;
 import com.example.demo.Dtos.BetRequest;
 import com.example.demo.Dtos.BetSelectionRequest;
 import com.example.demo.mapper.BetMapper;
-import com.example.demo.model.Bet;
-import com.example.demo.model.Customer;
-import com.example.demo.model.Event;
-import com.example.demo.model.Result;
+import com.example.demo.model.*;
 import com.example.demo.proxy.SportApiProxy;
+import com.example.demo.repo.BalanceHistoryRepo;
 import com.example.demo.repo.BetRepo;
 import com.example.demo.repo.CustomerRepo;
 import com.example.demo.repo.EventRepo;
+import com.example.demo.services.BalanceHistoryService;
 import com.example.demo.services.BetService;
 import com.example.demo.services.CustomerService;
 import org.junit.jupiter.api.Test;
@@ -27,20 +26,29 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
 public class BetServiceTest {
     @Mock
     private CustomerRepo customerRepo;
-    @Mock private CustomerService customerService;
-    @Mock private EventRepo eventRepo;
-    @Mock private BetRepo betRepo;
-    @Mock private SportApiProxy proxy;
-    @Mock private Environment env;
-    @Mock private BetMapper betMapper;
+    @Mock
+    private CustomerService customerService;
+    @Mock
+    private BalanceHistoryRepo balanceHistoryRepo;
+    @Mock
+    private BalanceHistoryService balanceHistoryService;
+    @Mock
+    private EventRepo eventRepo;
+    @Mock
+    private BetRepo betRepo;
+    @Mock
+    private SportApiProxy proxy;
+    @Mock
+    private Environment env;
+    @Mock
+    private BetMapper betMapper;
 
     @InjectMocks
     private BetService betService;
@@ -73,8 +81,10 @@ public class BetServiceTest {
 
         when(customerService.getAuthenticatedUsername()).thenReturn(userId);
         when(customerRepo.findById(userId)).thenReturn(Optional.of(customer));
-        when(eventRepo.findById(event.getEventId())).thenReturn(Optional.of(event));
-        when(betRepo.save(any())).thenAnswer(i -> i.getArgument(0));
+        when(eventRepo.findById(eventId)).thenReturn(Optional.of(event));
+        when(betRepo.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        doNothing().when(balanceHistoryService).saveBalanceChange(any(), any(), any(), any());
+
 
         Bet result = betService.createBet(betRequest);
 
@@ -85,8 +95,13 @@ public class BetServiceTest {
         assertEquals(1, result.getSelections().size());
         assertEquals(customer.getId(), result.getUser().getId());
 
-        verify(customerRepo).save(any());
         verify(betRepo).save(any());
+        verify(balanceHistoryService).saveBalanceChange(
+                eq(customer),
+                eq(TransactionType.BET_PLACED),
+                eq(betRequest.getAmount()),
+                eq("Bet placed")
+        );
 
 
     }

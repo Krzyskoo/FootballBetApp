@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.Dtos.CustomerDTO;
-import com.example.demo.constans.ApplicationConstans;
+import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.model.Customer;
 import com.example.demo.repo.CustomerRepo;
 import io.jsonwebtoken.Jwts;
@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -28,7 +27,7 @@ public class CustomerService {
 
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private Environment env;
+    private final Environment env;
 
 
     public CustomerService(CustomerRepo customerRepo, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, Environment env) {
@@ -40,7 +39,7 @@ public class CustomerService {
 
 
     public String generateJWTToken(String username, String password) {
-        String secret = env.getProperty(ApplicationConstans.JWT_SECRET_KEY);
+        String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY);
         String jwt = "";
         Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(username,
                 password);
@@ -81,13 +80,7 @@ public class CustomerService {
         return customerRepo.findById(id).orElse(null);
     }
 
-    public void updateBalance(Long id, BigDecimal balance) {
-        Customer customer = customerRepo.findById(id).orElse(null);
-        if (customer != null) {
-            customer.setBalance(customer.getBalance().add(balance));
-            customerRepo.save(customer);
-        }
-    }
+
     public CustomerDTO getCustomer() {
         return customerRepo.findById(getAuthenticatedUsername())
                 .map(customer -> new CustomerDTO(

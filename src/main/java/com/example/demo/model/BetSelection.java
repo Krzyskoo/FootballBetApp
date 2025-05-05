@@ -25,12 +25,15 @@ public class BetSelection {
     private Bet bet;
 
     @Column(nullable = false)
-    private BigDecimal lockedOdds; // 1.90
+    private BigDecimal lockedOdds;
 
     @Enumerated(EnumType.STRING)
     private Result predictedResult;
 
-    private boolean isWon;
+
+    @Builder.Default
+    private boolean isWon = false;
+
 
     private boolean completed;
 

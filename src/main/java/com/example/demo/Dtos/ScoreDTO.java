@@ -39,5 +39,4 @@ public class ScoreDTO {
 
     @JsonProperty("last_update")
     private Date lastUpdate;
-
 }

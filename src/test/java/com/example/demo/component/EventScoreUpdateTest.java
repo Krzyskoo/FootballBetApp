@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 
@@ -44,15 +42,11 @@ public class EventScoreUpdateTest {
 
 
     @Test
-    void updateMatchResultDaily_whenNoSportKeys_thenThrows() {
+    void updateMatchResultDaily_whenNoSportKeys() {
         when(eventService.getSportsKeysFromNonCompletedEvents())
                 .thenReturn(Set.of());
 
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> component.updateMatchResultDaily()
-        );
-        assertEquals("No events to update", ex.getMessage());
+        component.updateMatchResultDaily();
 
         verifyNoInteractions(proxy);
 

@@ -1,6 +1,6 @@
 package com.example.demo.filter;
 
-import com.example.demo.constans.ApplicationConstans;
+import com.example.demo.constants.ApplicationConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -25,12 +25,12 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwt = request.getHeader(ApplicationConstans.JWT_HEADER);
+        String jwt = request.getHeader(ApplicationConstants.JWT_HEADER);
 
         if(null != jwt) {
             try {
                 Environment env = getEnvironment();
-                String secret = env.getProperty(ApplicationConstans.JWT_SECRET_KEY);
+                String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY);
                 SecretKey secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
                     if(null !=secretKey) {
                         Claims claims = Jwts.parser().verifyWith(secretKey)

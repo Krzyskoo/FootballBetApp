@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -26,13 +27,14 @@ public class Customer {
 
     private String password;
     private BigDecimal balance;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<BalanceHistory> balanceHistory = new ArrayList<>();
+
     @OneToMany(mappedBy = "customer")
     @JsonManagedReference
     private List<Payment> payments;
     @JsonIgnore
     private Date createdDt;
-
-
 
     @OneToMany(mappedBy ="customer",fetch = FetchType.EAGER)
     @JsonIgnore

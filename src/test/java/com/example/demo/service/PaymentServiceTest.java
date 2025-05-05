@@ -3,8 +3,10 @@ package com.example.demo.service;
 import com.example.demo.model.Customer;
 import com.example.demo.model.Payment;
 import com.example.demo.model.PaymentStatus;
+import com.example.demo.model.TransactionType;
+import com.example.demo.repo.CustomerRepo;
 import com.example.demo.repo.PaymentRepo;
-import com.example.demo.services.CustomerService;
+import com.example.demo.services.BalanceHistoryService;
 import com.example.demo.services.PaymentService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +27,9 @@ public class PaymentServiceTest {
     private PaymentRepo paymentRepo;
 
     @Mock
-    private CustomerService customerService;
+    private CustomerRepo customerRepo;
+    @Mock
+    private BalanceHistoryService balanceHistoryService;
 
     @InjectMocks
     private PaymentService paymentService;
@@ -46,7 +50,7 @@ public class PaymentServiceTest {
         // Then
         assertEquals("stripe123", payment.getStripePaymentId());
         verify(paymentRepo).save(payment);
-        verify(customerService, never()).updateBalance(any(), any());
+        verify(balanceHistoryService, never()).saveBalanceChange(any(), any(), any(), any());
     }
 
     @Test
@@ -60,14 +64,15 @@ public class PaymentServiceTest {
                 .build();
 
         when(paymentRepo.findById(1L)).thenReturn(Optional.of(payment));
-
+        when(customerRepo.findById(5L)).thenReturn(Optional.of(payment.getCustomer()));
+        Customer customer = paymentRepo.findById(1L).get().getCustomer();
         // When
         paymentService.updatePaymentStatus("1", "unusedStripeId", "payment_intent.succeeded");
 
         // Then
         assertEquals(PaymentStatus.SUCCEEDED, payment.getStatus());
         verify(paymentRepo).save(payment);
-        verify(customerService).updateBalance(5L, new BigDecimal("100.00"));
+        verify(balanceHistoryService).saveBalanceChange(payment.getCustomer(), TransactionType.DEPOSIT, payment.getAmount(),"Deposit");
     }
 
     @Test
@@ -85,7 +90,7 @@ public class PaymentServiceTest {
 
         // Then
         verify(paymentRepo, never()).save(any());
-        verify(customerService, never()).updateBalance(any(), any());
+        verify(balanceHistoryService, never()).saveBalanceChange(any(),any(),any(), any());
     }
 
     @Test
@@ -98,6 +103,6 @@ public class PaymentServiceTest {
 
         // Then
         verify(paymentRepo, never()).save(any());
-        verify(customerService, never()).updateBalance(any(), any());
+        verify(balanceHistoryService, never()).saveBalanceChange(any(),any(),any(), any());
     }
 }
