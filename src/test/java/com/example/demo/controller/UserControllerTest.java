@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,7 +26,7 @@ class UserControllerTest {
 
     @Mock
     private CustomerService customerService;
-    @Mock
+    @MockBean
     private KafkaProducerService kafkaProducerService;
 
     @InjectMocks

@@ -2,10 +2,12 @@ package com.example.demo.integration;
 
 import com.example.demo.Dtos.InternalEventDTO;
 import com.example.demo.FootballPageApplication;
+import com.example.demo.kafka.KafkaProducerService;
 import com.example.demo.model.LoginRequestDTO;
 import com.example.demo.model.LoginResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -29,6 +31,8 @@ public class EventControllerIntegrationTest {
     TestRestTemplate rest = new TestRestTemplate();
 
     HttpHeaders headers;
+    @Mock
+    private KafkaProducerService kafkaProducerService;
 
     @BeforeEach
     void setup() {
