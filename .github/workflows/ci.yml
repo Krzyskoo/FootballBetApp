@@ -1,6 +1,4 @@
-cd C:\Users\krzys\OneDrive\Pulpit\football_page
-mkdir -p .github/workflows
-cat > .github/workflows/ci.yml <<EOF
+
 name: CI/CD
 on:
   push:
