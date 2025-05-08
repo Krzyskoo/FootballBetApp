@@ -3,7 +3,6 @@ package com.example.demo.integration;
 import com.example.demo.Dtos.BetRequest;
 import com.example.demo.Dtos.BetSelectionRequest;
 import com.example.demo.constants.ApplicationConstants;
-import com.example.demo.kafka.KafkaProducerService;
 import com.example.demo.model.Event;
 import com.example.demo.model.LoginRequestDTO;
 import com.example.demo.model.Result;
@@ -45,8 +44,6 @@ public class BetControllerIntegrationTest {
     private EventRepo eventRepo;
     @Autowired
     private BetRepo betRepo;
-    @Autowired
-    private KafkaProducerService kafkaProducerService;
 
     private String jwtToken;
 
