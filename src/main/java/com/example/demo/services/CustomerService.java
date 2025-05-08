@@ -1,11 +1,13 @@
 package com.example.demo.services;
 
 import com.example.demo.Dtos.CustomerDTO;
+import com.example.demo.Dtos.RegisterRequestDTO;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.model.Customer;
 import com.example.demo.repo.CustomerRepo;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,10 +18,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CustomerService {
 
@@ -39,6 +42,7 @@ public class CustomerService {
 
 
     public String generateJWTToken(String username, String password) {
+        log.info("Generating JWT token for user {}", username);
         String secret = env.getProperty(ApplicationConstants.JWT_SECRET_KEY);
         String jwt = "";
         Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(username,
@@ -58,6 +62,7 @@ public class CustomerService {
         return jwt;
     }
     public Long getAuthenticatedUsername() {
+        log.info("Getting authenticated username");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
@@ -66,12 +71,11 @@ public class CustomerService {
         return customerRepo.findByEmail(authentication.getName()).get().getId();
     }
 
-    public Customer save(Customer user) {
-        if (customerRepo.findByEmail(user.getEmail()).isEmpty()){
-            String hasPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(hasPassword);
-            user.setCreatedDt(new Date(System.currentTimeMillis()));
-            return customerRepo.save(user);
+    public Customer save(RegisterRequestDTO registerRequest) {
+        if (customerRepo.findByEmail(registerRequest.getEmail()).isEmpty()){
+            String hasPassword = passwordEncoder.encode(registerRequest.getPassword());
+            Customer customer = new Customer(registerRequest.getEmail(), hasPassword, BigDecimal.ZERO);
+            return customerRepo.save(customer);
         }else throw new IllegalArgumentException("Email already exists");
 
     }

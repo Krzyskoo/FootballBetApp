@@ -7,13 +7,14 @@ import com.example.demo.model.Result;
 import com.example.demo.model.Score;
 import com.example.demo.proxy.SportApiProxy;
 import com.example.demo.repo.EventRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 public class EventService {
     private final SportApiProxy proxy;
@@ -71,7 +72,7 @@ public class EventService {
                 .build();
     }
     public Map<String,Map<String, String>> extractOdds(List<OddsDTO> events) {
-
+        log.info("Extracting Odds from API call");
         return events.stream()
                 .collect(Collectors.toMap(
                         OddsDTO::getId,
@@ -93,6 +94,7 @@ public class EventService {
 
     }
     public void updateEventsWithEmptyOdds(List<OddsDTO> oddsDTO) {
+        log.info("Updating events with empty odds");
         Map<String, Map<String,String>> extractOdds = extractOdds(oddsDTO);
         for (OddsDTO eventOdds: oddsDTO) {
             Map<String, String> oddsForEvent = extractOdds.getOrDefault(eventOdds.getId(), Collections.emptyMap());
@@ -105,7 +107,9 @@ public class EventService {
                         homeOdds,
                         awayOdds,
                         drawOdds);
+                log.info("Updated odds for event {}", eventOdds.getId());
             }catch (NumberFormatException e){
+                log.error("Error parsing odds for event {}", eventOdds.getId());
                 System.out.println("Błąd parsowania kursu dla eventu " + eventOdds.getId());
                 e.printStackTrace();
             }
@@ -117,6 +121,7 @@ public class EventService {
     public void updateMatchResult(List<ScoreDTO> scoreDTO){
         for (ScoreDTO result: scoreDTO) {
             Optional<Event> eventOpt = eventRepo.findById(result.getId());
+            log.info("Updating match result for event {}", result.getId());
             if (eventOpt.isPresent()&&result.isCompleted()) {
                 Event event = eventOpt.get();
                 long homeScore = getTeamScore(result, event.getHomeTeam());
@@ -132,8 +137,9 @@ public class EventService {
                 event.setCompleted(true);
                 event.setScore(score);
                 eventRepo.saveAndFlush(event);
+                log.info("Match result updated for event {} with result {}", result.getId(),event.getStatus());
 
-               betSelectionService.updateBetSelections(event, event.getStatus());
+                betSelectionService.updateBetSelections(event, event.getStatus());
             }
         }
 

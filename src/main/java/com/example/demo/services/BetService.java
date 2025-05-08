@@ -12,6 +12,7 @@ import com.example.demo.repo.EventRepo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
+@Slf4j
 public class BetService {
     private final CustomerRepo customerRepo;
     private final CustomerService customerService;
@@ -33,6 +35,7 @@ public class BetService {
     private final SportApiProxy proxy;
     private final Environment env;
     private final BetMapper betMapper;
+    private final BalanceHistoryService balanceHistoryService;
 
 
     @Transactional
@@ -71,12 +74,11 @@ public class BetService {
         for (BetSelection selection : selections){
             selection.setBet(bet);
         }
-        customer.setBalance(customer.getBalance().subtract(betRequest.getAmount()));
-        customerRepo.save(customer);
+        balanceHistoryService.saveBalanceChange(customer,TransactionType.BET_PLACED,bet.getStake(),"Bet placed" );
         return betRepo.save(bet);
     }
 
-    private BigDecimal getOdds(Event event, Result predictedResult) {
+    public BigDecimal getOdds(Event event, Result predictedResult) {
         return switch (predictedResult) {
             case HOME_WIN -> new BigDecimal(event.getHomeTeamOdds());
             case AWAY_WIN -> new BigDecimal(event.getAwayTeamOdds());
@@ -86,14 +88,17 @@ public class BetService {
     }
 
     public void updateBetAfterUpdateBetSelections(List<BetSelection>selections) {
+        log.info("Updating bet selections results");
         selections.forEach(
                 selection -> betRepo.findBySelectionsId(selection.getId()).ifPresent(bet -> {
                         boolean allCompleted = bet.getSelections().stream().allMatch(BetSelection::isCompleted);
                         boolean allWon = bet.getSelections().stream().allMatch(BetSelection::isWon);
                         if (allCompleted && allWon) {
                             bet.setStatus("WON");
+                            log.info("Bet won by user {}", bet.getUser().getId());
                             updateBalanceAfterBetWin(bet);
                         }else if (allCompleted && !allWon) {
+                            log.info("Bet lost by user {}", bet.getUser().getId());
                             bet.setStatus("LOST");
                         }
                         betRepo.save(bet);
@@ -104,11 +109,11 @@ public class BetService {
 
     }
     public void updateBalanceAfterBetWin(Bet bet) {
+        log.info("Updating balance after bet win");
         Customer customer = customerRepo.findById(bet.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("Customer not found")
         );
-        customer.setBalance(customer.getBalance().add(bet.getWinAmount()));
-        customerRepo.save(customer);
+        balanceHistoryService.saveBalanceChange(customer,TransactionType.BET_WON,bet.getWinAmount(),"Bet won" );
     }
     public List<BetDTO> getBetsCreatedByUser(){
         List<Bet> bets = betRepo.findAllByUserId(customerService.getAuthenticatedUsername())

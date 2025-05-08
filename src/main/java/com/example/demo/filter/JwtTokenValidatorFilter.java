@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,12 +20,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-
+@Slf4j
 public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("Inside JwtTokenValidatorFilter");
         String jwt = request.getHeader(ApplicationConstants.JWT_HEADER);
 
         if(null != jwt) {
@@ -44,6 +46,7 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
 
             } catch (Exception exception) {
+                log.error("Error in JwtTokenValidatorFilter");
                 throw new BadCredentialsException("Invalid Token received!");
             }
         }

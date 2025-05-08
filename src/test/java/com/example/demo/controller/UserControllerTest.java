@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.Dtos.RegisterRequestDTO;
 import com.example.demo.constants.ApplicationConstants;
+import com.example.demo.kafka.KafkaProducerService;
 import com.example.demo.model.Customer;
 import com.example.demo.services.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +25,8 @@ class UserControllerTest {
 
     @Mock
     private CustomerService customerService;
+    @Mock
+    private KafkaProducerService kafkaProducerService;
 
     @InjectMocks
     private UserController userController;
@@ -41,7 +45,9 @@ class UserControllerTest {
     void registerUser_whenSavedWithIdGreaterThanZero_thenReturns201() throws Exception {
         Customer saved = new Customer();
         saved.setId(42L);
-        when(customerService.save(any(Customer.class))).thenReturn(saved);
+        saved.setEmail("test@example.com");
+        when(customerService.save(any(RegisterRequestDTO.class))).thenReturn(saved);
+
 
         mockMvc.perform(post("/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +60,7 @@ class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string("User registered successfully"));
 
-        verify(customerService, times(1)).save(any(Customer.class));
+        verify(customerService, times(1)).save(any(RegisterRequestDTO.class));
     }
 
     @Test

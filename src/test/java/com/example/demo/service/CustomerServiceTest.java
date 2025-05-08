@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.Dtos.CustomerDTO;
+import com.example.demo.Dtos.RegisterRequestDTO;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.model.Customer;
 import com.example.demo.model.TransactionType;
@@ -55,7 +56,7 @@ public class CustomerServiceTest {
 
     @Test
     void shouldSaveNewCustomer_whenEmailNotExists() {
-        Customer customer = Customer.builder()
+        RegisterRequestDTO customer = RegisterRequestDTO.builder()
                 .email("test@example.com")
                 .password("plainPassword")
                 .build();
@@ -68,7 +69,7 @@ public class CustomerServiceTest {
 
         assertEquals("encodedPassword", saved.getPassword());
         assertEquals("test@example.com", saved.getEmail());
-        verify(customerRepo).save(customer);
+        verify(customerRepo).save(saved);
     }
     @Test
     void shouldThrowException_whenEmailExists() {
@@ -77,7 +78,7 @@ public class CustomerServiceTest {
 
         when(customerRepo.findByEmail("test@example.com")).thenReturn(Optional.of(existing));
 
-        Customer newCustomer = Customer.builder()
+        RegisterRequestDTO newCustomer = RegisterRequestDTO.builder()
                 .email("test@example.com")
                 .password("pass")
                 .build();

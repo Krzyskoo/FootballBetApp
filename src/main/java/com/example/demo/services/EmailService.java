@@ -12,13 +12,14 @@ import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -39,10 +40,10 @@ public class EmailService {
         request.setBody(mail.build());
 
         Response response = sg.api(request);
-        System.out.println("Status Code: " + response.getStatusCode());
-        System.out.println("Body: " + response.getBody());
+        log.info("Contact email status: " + response.getStatusCode());
     }
     public String loadHtmlTemplate(ContactRequestDTO dto) throws IOException {
+        log.info("Loading email contact template");
         String path = "src/main/resources/templates/email-template.html";
         String template = new String(Files.readAllBytes(Paths.get(path)));
 
@@ -70,10 +71,11 @@ public class EmailService {
         request.setBody(mail.build());
 
         Response response = sg.api(request);
-        System.out.println("Mail status: " + response.getStatusCode());
+        log.info("Welcome email status: " + response.getStatusCode());
     }
 
     private String loadWelcomeTemplate(String name) throws IOException {
+        log.info("Loading welcome email template");
         String path = "src/main/resources/templates/welcome-email-template.html";
         String template = new String(Files.readAllBytes(Paths.get(path)));
 

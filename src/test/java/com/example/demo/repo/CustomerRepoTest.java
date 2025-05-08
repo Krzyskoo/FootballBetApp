@@ -31,7 +31,7 @@ public class CustomerRepoTest {
     @Test
     void shouldFindCustomerByEmail() {
         Customer customer = new Customer();
-        customer.setEmail("another@example.com");
+        customer.setEmail("another2@example.com");
         customer.setPassword("password");
         customerRepo.save(customer);
 

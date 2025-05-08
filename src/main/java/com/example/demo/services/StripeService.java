@@ -9,11 +9,12 @@ import com.stripe.model.Event;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-
+@Slf4j
 @Service
 public class StripeService {
     private final PaymentRepo paymentRepo;
@@ -27,7 +28,7 @@ public class StripeService {
     }
 
     public String createCheckoutSession(long amount, String currency, String paymentId) throws StripeException {
-
+        log.info("Creating checkout session for amount: {}, currency: {}", amount, currency);
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl("http://localhost:4200/payment-success")
@@ -58,8 +59,7 @@ public class StripeService {
 
         Session session = Session.create(params);
 
-
-        return session.getUrl(); // Zwrot URL do przekierowania na Stripe
+        return session.getUrl();
     }
 
     public String createCheckoutUrl(long amount, String currency) throws StripeException {
@@ -80,8 +80,8 @@ public class StripeService {
     }
 
     public ResponseEntity<String> handleWebhook(Event stripeEvent) throws StripeException {
+        log.info("Received webhook event: {}", stripeEvent.getType());
 
-        // Pobranie typu eventu
         String eventType = stripeEvent.getType();
 
         if ("checkout.session.completed".equals(eventType)) {
@@ -93,7 +93,6 @@ public class StripeService {
         return ResponseEntity.ok("OK");
     }
 
-    // Metoda do obsługi checkout.session.completed
     private ResponseEntity<String> handleCheckoutSessionCompleted(Event stripeEvent) {
 
         Session session = (Session) stripeEvent.getData().getObject();
@@ -104,8 +103,7 @@ public class StripeService {
         String paymentIdInDatabase = session.getMetadata().get("payment_id");
         String paymentId = session.getPaymentIntent();
 
-        System.out.println("Session ID: " + session.getId());
-        System.out.println("Session Metadata: " + session.getMetadata());
+        log.info("Payment ID in database: {}, Payment ID: {}", paymentIdInDatabase, paymentId);
 
 
 
@@ -119,24 +117,24 @@ public class StripeService {
         return ResponseEntity.ok("OK");
     }
 
-    // Metoda do obsługi payment_intent.succeeded
     private ResponseEntity<String> handlePaymentIntentSucceeded(Event stripeEvent) {
+        log.info("Received payment_intent.succeeded event");
         PaymentIntent paymentIntent = (PaymentIntent) stripeEvent.getData().getObject();
         if (paymentIntent == null) {
             return ResponseEntity.badRequest().body("No payment intent data in event");
         }
 
-        System.out.println("PaymentIntent ID: " + paymentIntent.getId());
-        System.out.println("Metadata: " + paymentIntent.getMetadata());
+        log.info("Payment ID: {}", paymentIntent.getId());
 
-        // Pobranie Payment ID zapisane w metadanych
         String paymentIdInDatabase = paymentIntent.getMetadata().get("payment_id");
 
         if (paymentIdInDatabase == null) {
+            log.error("Missing payment_id in metadata");
             return ResponseEntity.badRequest().body("Missing payment_id in metadata");
         }
 
         paymentService.updatePaymentStatus(paymentIdInDatabase, paymentIntent.getId(), "payment_intent.succeeded");
+        log.info("Payment intent succeeded for payment ID: {}", paymentIdInDatabase);
 
         return ResponseEntity.ok("OK");
     }

@@ -3,11 +3,12 @@ package com.example.demo.services;
 import com.example.demo.Dtos.ContactRequestDTO;
 import com.example.demo.model.ContactMessage;
 import com.example.demo.repo.ContactMessageRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-
+@Slf4j
 @Service
 public class ContactMessageService {
     private final ContactMessageRepo messageRepository;

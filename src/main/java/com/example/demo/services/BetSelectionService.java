@@ -4,10 +4,11 @@ import com.example.demo.model.BetSelection;
 import com.example.demo.model.Event;
 import com.example.demo.model.Result;
 import com.example.demo.repo.BetSelectionRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Slf4j
 @Service
 public class BetSelectionService {
 
@@ -20,6 +21,7 @@ public class BetSelectionService {
     }
 
     public void updateBetSelections(Event event, Result actualResult) {
+        log.info("Updating bet selections for event {}", event.getEventId());
         List<BetSelection> selections = betSelectionRepo.findAllByEvent(event);
         selections.stream().forEach(selection-> {
             if (!selection.isCompleted()) {

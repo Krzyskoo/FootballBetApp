@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
@@ -20,11 +21,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class JwtTokenGenerationFilter extends OncePerRequestFilter {
     @Value("${SecretKey}")
     private String secret;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("Generating JWT token to spring security context");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (null != authentication) {
             Environment env = getEnvironment();

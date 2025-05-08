@@ -26,6 +26,7 @@ public class Customer {
     private String email;
 
     private String password;
+
     private BigDecimal balance;
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<BalanceHistory> balanceHistory = new ArrayList<>();
@@ -40,4 +41,9 @@ public class Customer {
     @JsonIgnore
     private Set<Authority> authorities;
 
+    public Customer(String email, String password, BigDecimal balance) {
+        this.email = email;
+        this.password = password;
+        this.balance = balance;
+    }
 }

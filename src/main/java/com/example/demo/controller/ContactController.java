@@ -2,6 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.Dtos.ContactRequestDTO;
 import com.example.demo.services.ContactMessageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +22,16 @@ public class ContactController {
         this.contactMessageService = contactMessageService;
     }
 
+
     @PostMapping
+    @Operation(
+            summary     = "Wyślij wiadomość kontaktową",
+            description = "Przyjmuje dane kontaktowe od użytkownika i wysyła wiadomość do zespołu supportu."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Wiadomość została wysłana pomyślnie"),
+            @ApiResponse(responseCode = "500", description = "Błąd serwera podczas przetwarzania wiadomości")
+    })
     public ResponseEntity<String> sendMessage(@RequestBody ContactRequestDTO dto) {
         try {
             contactMessageService.submitContact(dto);

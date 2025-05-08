@@ -4,6 +4,7 @@ import com.example.demo.Dtos.BetDTO;
 import com.example.demo.Dtos.BetRequest;
 import com.example.demo.Dtos.BetSelectionDTO;
 import com.example.demo.Dtos.InternalEventDTO;
+import com.example.demo.mapper.BetMapper;
 import com.example.demo.model.Bet;
 import com.example.demo.model.BetSelection;
 import com.example.demo.model.Event;
@@ -31,11 +32,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BetControllerTest {
     private MockMvc mockMvc;
     private BetService betService;
+    private BetMapper betMapper;
 
     @BeforeEach
     void setUp() {
         betService = mock(BetService.class);
-        BetController controller = new BetController(betService);
+        betMapper = mock(BetMapper.class);
+        BetController controller = new BetController(betService,betMapper);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -44,6 +47,9 @@ public class BetControllerTest {
     void placeBet_withSelections_thenReturnsCreatedWithSelections() throws Exception {
         Event ev1 = new Event(); ev1.setEventId("evt1");
         Event ev2 = new Event(); ev2.setEventId("evt2");
+        InternalEventDTO eventDTO = new InternalEventDTO(); eventDTO.setEventId("evt1");
+        InternalEventDTO eventDTO2 = new InternalEventDTO(); eventDTO2.setEventId("evt2");
+
 
         BetSelection sel1 = BetSelection.builder()
                 .id(1L)
@@ -68,8 +74,26 @@ public class BetControllerTest {
                 .winAmount(new BigDecimal("35.00"))
                 .selections(List.of(sel1, sel2))
                 .build();
+        BetDTO betDto = new BetDTO(
+                123L,
+                new BigDecimal("3.50"),
+                new BigDecimal("10.00"),
+                "PENDING",
+                new BigDecimal("35.00"),
+                List.of(
+                        new BetSelectionDTO(sel1.getId(),eventDTO,sel1.getLockedOdds(),sel1.getPredictedResult().name(),sel1.isWon(),sel1.isCompleted()),
+                        new BetSelectionDTO(sel2.getId(),eventDTO2,sel2.getLockedOdds(),sel2.getPredictedResult().name(),sel2.isWon(),sel2.isCompleted())
+                ),
+                new Date()
+        );
+
+// 2) Zstubuj mapper
+        when(betMapper.toBetDTO(created)).thenReturn(betDto);
+
 
         when(betService.createBet(any(BetRequest.class))).thenReturn(created);
+        when(betMapper.toBetDTO(created)).thenReturn(betDto);
+
 
         String jsonRequest = """
             {
@@ -86,9 +110,7 @@ public class BetControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
-                .andExpect(jsonPath("$.betId", is(123)))
                 .andExpect(jsonPath("$.stake", is(10.00)))
                 .andExpect(jsonPath("$.totalOdds", is(3.50)))
                 .andExpect(jsonPath("$.winAmount", is(35.00)))

@@ -59,14 +59,19 @@ public class ProjectSecurityConfig {
                     }
                 }))
                 .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
-                        .ignoringRequestMatchers( "/contact","/register", "/login","/webhook","/create-payment-intent","/bets/place/**")
+                        .ignoringRequestMatchers( "/contact","/register", "/login","/webhook","/create-payment-intent","/bets/place/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**" )
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
                 .addFilterAfter(new JwtTokenGenerationFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/secured","/sports","/event/**","/event/odds/**","/bet/**","/index","/create-payment-intent","/customer").authenticated()
-                        .requestMatchers("/register","/login","/webhook","bets/**","/contact").permitAll());
+                        .requestMatchers("/register","/login","/webhook","bets/**","/contact","/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**" ).permitAll());
         return http.build();
     }
 
