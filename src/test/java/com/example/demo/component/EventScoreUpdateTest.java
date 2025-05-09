@@ -1,7 +1,7 @@
 package com.example.demo.component;
 
-import com.example.demo.Dtos.MatchResultDTO;
-import com.example.demo.Dtos.ScoreDTO;
+import com.example.demo.dtos.MatchResultDTO;
+import com.example.demo.dtos.ScoreDTO;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.model.Event;
 import com.example.demo.model.Result;

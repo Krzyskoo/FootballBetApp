@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.Dtos.RegisterRequestDTO;
-import com.example.demo.Dtos.UserRegisteredEvent;
+import com.example.demo.dtos.RegisterRequestDTO;
+import com.example.demo.dtos.UserRegisteredEvent;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.kafka.KafkaProducerService;
 import com.example.demo.model.Customer;

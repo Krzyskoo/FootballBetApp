@@ -1,4 +1,4 @@
-package com.example.demo.Dtos;
+package com.example.demo.dtos;
 
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;

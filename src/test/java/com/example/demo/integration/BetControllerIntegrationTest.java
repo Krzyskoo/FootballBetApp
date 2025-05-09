@@ -1,7 +1,7 @@
 package com.example.demo.integration;
 
-import com.example.demo.Dtos.BetRequest;
-import com.example.demo.Dtos.BetSelectionRequest;
+import com.example.demo.dtos.BetRequest;
+import com.example.demo.dtos.BetSelectionRequest;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.model.Event;
 import com.example.demo.model.LoginRequestDTO;

@@ -1,6 +1,6 @@
 package com.example.demo.mapper;
 
-import com.example.demo.Dtos.InternalEventDTO;
+import com.example.demo.dtos.InternalEventDTO;
 import com.example.demo.model.Event;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

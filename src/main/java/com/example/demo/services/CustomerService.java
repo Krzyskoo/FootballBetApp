@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
-import com.example.demo.Dtos.CustomerDTO;
-import com.example.demo.Dtos.RegisterRequestDTO;
+import com.example.demo.dtos.CustomerDTO;
+import com.example.demo.dtos.RegisterRequestDTO;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.model.Customer;
 import com.example.demo.repo.CustomerRepo;

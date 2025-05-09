@@ -1,9 +1,9 @@
 package com.example.demo.component;
 
-import com.example.demo.Dtos.BookmakersDTO;
-import com.example.demo.Dtos.MarketDTO;
-import com.example.demo.Dtos.OddsDTO;
-import com.example.demo.Dtos.OutcomesDTO;
+import com.example.demo.dtos.BookmakersDTO;
+import com.example.demo.dtos.MarketDTO;
+import com.example.demo.dtos.OddsDTO;
+import com.example.demo.dtos.OutcomesDTO;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.proxy.SportApiProxy;
 import com.example.demo.repo.EventRepo;

@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.Dtos.InternalEventDTO;
+import com.example.demo.dtos.InternalEventDTO;
 import com.example.demo.mapper.EventMapper;
 import com.example.demo.model.Event;
 import com.example.demo.model.Result;

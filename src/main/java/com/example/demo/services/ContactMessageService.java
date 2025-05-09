@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.Dtos.ContactRequestDTO;
+import com.example.demo.dtos.ContactRequestDTO;
 import com.example.demo.model.ContactMessage;
 import com.example.demo.repo.ContactMessageRepo;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.Dtos.*;
+import com.example.demo.dtos.*;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.model.Event;
 import com.example.demo.model.Result;

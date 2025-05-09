@@ -1,9 +1,9 @@
 package com.example.demo.proxy;
 
-import com.example.demo.Dtos.EventsDTO;
-import com.example.demo.Dtos.OddsDTO;
-import com.example.demo.Dtos.ScoreDTO;
-import com.example.demo.Dtos.SportDTO;
+import com.example.demo.dtos.EventsDTO;
+import com.example.demo.dtos.OddsDTO;
+import com.example.demo.dtos.ScoreDTO;
+import com.example.demo.dtos.SportDTO;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;

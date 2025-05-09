@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.Dtos.BetDTO;
-import com.example.demo.Dtos.BetRequest;
-import com.example.demo.Dtos.BetSelectionDTO;
-import com.example.demo.Dtos.InternalEventDTO;
+import com.example.demo.dtos.BetDTO;
+import com.example.demo.dtos.BetRequest;
+import com.example.demo.dtos.BetSelectionDTO;
+import com.example.demo.dtos.InternalEventDTO;
 import com.example.demo.mapper.BetMapper;
 import com.example.demo.model.Bet;
 import com.example.demo.model.BetSelection;

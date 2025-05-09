@@ -1,8 +1,8 @@
 package com.example.demo.services;
 
 
-import com.example.demo.Dtos.ContactRequestDTO;
-import com.example.demo.Dtos.UserRegisteredEvent;
+import com.example.demo.dtos.ContactRequestDTO;
+import com.example.demo.dtos.UserRegisteredEvent;
 import com.example.demo.constants.ApplicationConstants;
 import com.sendgrid.Method;
 import com.sendgrid.Request;

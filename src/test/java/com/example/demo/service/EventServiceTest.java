@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.Dtos.*;
+import com.example.demo.dtos.*;
 import com.example.demo.model.Event;
 import com.example.demo.model.Result;
 import com.example.demo.model.Score;

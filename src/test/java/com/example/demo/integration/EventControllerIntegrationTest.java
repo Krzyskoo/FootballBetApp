@@ -1,6 +1,6 @@
 package com.example.demo.integration;
 
-import com.example.demo.Dtos.InternalEventDTO;
+import com.example.demo.dtos.InternalEventDTO;
 import com.example.demo.FootballPageApplication;
 import com.example.demo.model.LoginRequestDTO;
 import com.example.demo.model.LoginResponseDTO;

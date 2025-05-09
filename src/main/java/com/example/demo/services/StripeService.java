@@ -79,7 +79,7 @@ public class StripeService {
        return createCheckoutSession(amount, currency,paymentId);
     }
 
-    public ResponseEntity<String> handleWebhook(Event stripeEvent) throws StripeException {
+    public ResponseEntity<String> handleWebhook(Event stripeEvent) {
         log.info("Received webhook event: {}", stripeEvent.getType());
 
         String eventType = stripeEvent.getType();

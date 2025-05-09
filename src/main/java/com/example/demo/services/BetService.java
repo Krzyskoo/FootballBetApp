@@ -1,8 +1,8 @@
 package com.example.demo.services;
 
-import com.example.demo.Dtos.BetDTO;
-import com.example.demo.Dtos.BetRequest;
-import com.example.demo.Dtos.BetSelectionRequest;
+import com.example.demo.dtos.BetDTO;
+import com.example.demo.dtos.BetRequest;
+import com.example.demo.dtos.BetSelectionRequest;
 import com.example.demo.mapper.BetMapper;
 import com.example.demo.model.*;
 import com.example.demo.proxy.SportApiProxy;

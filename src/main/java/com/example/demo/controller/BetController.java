@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.Dtos.BetDTO;
-import com.example.demo.Dtos.BetRequest;
+import com.example.demo.dtos.BetDTO;
+import com.example.demo.dtos.BetRequest;
 import com.example.demo.mapper.BetMapper;
 import com.example.demo.model.Bet;
 import com.example.demo.services.BetService;

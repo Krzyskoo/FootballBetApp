@@ -1,6 +1,6 @@
 package com.example.demo.kafka;
 
-import com.example.demo.Dtos.UserRegisteredEvent;
+import com.example.demo.dtos.UserRegisteredEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

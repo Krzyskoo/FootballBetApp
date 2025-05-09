@@ -1,6 +1,6 @@
 package com.example.demo.component;
 
-import com.example.demo.Dtos.ScoreDTO;
+import com.example.demo.dtos.ScoreDTO;
 import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.proxy.SportApiProxy;
 import com.example.demo.services.EventService;

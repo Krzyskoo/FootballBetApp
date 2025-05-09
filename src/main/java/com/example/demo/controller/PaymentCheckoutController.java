@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.Dtos.PaymentIntentRequestDTO;
+import com.example.demo.dtos.PaymentIntentRequestDTO;
 import com.example.demo.repo.PaymentRepo;
 import com.example.demo.services.CustomerService;
 import com.example.demo.services.StripeService;

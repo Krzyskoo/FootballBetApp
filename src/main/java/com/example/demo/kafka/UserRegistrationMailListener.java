@@ -1,6 +1,6 @@
 package com.example.demo.kafka;
 
-import com.example.demo.Dtos.UserRegisteredEvent;
+import com.example.demo.dtos.UserRegisteredEvent;
 import com.example.demo.services.EmailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
