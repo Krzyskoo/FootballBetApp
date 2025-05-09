@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.constants.ApplicationConstants;
+import com.example.demo.dtos.CustomerDTO;
 import com.example.demo.dtos.RegisterRequestDTO;
 import com.example.demo.dtos.UserRegisteredEvent;
-import com.example.demo.constants.ApplicationConstants;
 import com.example.demo.kafka.KafkaProducerService;
 import com.example.demo.model.Customer;
 import com.example.demo.model.LoginRequestDTO;
@@ -13,11 +14,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,5 +95,35 @@ public class UserController {
         String jwt = customerService.generateJWTToken(loginRequest.username(), loginRequest.password());
         return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER,jwt)
                 .body(new LoginResponseDTO(HttpStatus.OK.getReasonPhrase(), jwt));
+    }
+    @GetMapping("/customer")
+    @SecurityRequirement(name = "JWT")
+    @Operation(
+            summary     = "Get current customer",
+            description = "Returns the profile information of the currently authenticated customer."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description  = "Customer data retrieved successfully",
+                    content      = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema    = @Schema(implementation = CustomerDTO.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description  = "Unauthorized",
+                    content      = @Content(schema = @Schema())
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description  = "Internal server error",
+                    content      = @Content(schema = @Schema())
+            )
+    })
+    public ResponseEntity<CustomerDTO> securedEndpoint() {
+        log.info("Fetching current authenticated customer");
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.getCustomer());
     }
 }
