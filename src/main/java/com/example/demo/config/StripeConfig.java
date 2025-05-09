@@ -1,14 +1,19 @@
 package com.example.demo.config;
 
+import com.example.demo.constants.ApplicationConstants;
 import com.stripe.Stripe;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
+@RequiredArgsConstructor
 @Configuration
 public class StripeConfig {
 
+    private final Environment env;
     @PostConstruct
     public void init(){
-        Stripe.apiKey="sk_test_51OHCJtDC7PH0QkQkgOZfQKT0MLhcPVSyTOX1lRLeeDwPpCDHmXmSVvyTWlW45jS1xN5gWBjfibWS6zr2RJdlEoTJ00nxzxvhYK";
+        Stripe.apiKey= env.getProperty(ApplicationConstants.STRIPE_API_KEY);
     }
 }

@@ -8,4 +8,5 @@ public class ApplicationConstants {
     public static final String SPORRT_MARKET = "h2h";
     public static final String SPORT_REGION = "us";
     public static final String SendGrid_API_KEY = "SENDGRID_API_KEY";
+    public static final String STRIPE_API_KEY ="STRIPE_API_KEY";
 }
