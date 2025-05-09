@@ -12,31 +12,31 @@ import lombok.Setter;
 @AllArgsConstructor
 @Schema(
         name        = "ContactRequestDTO",
-        description = "Payload zgłoszenia kontaktowego zawierający dane nadawcy i treść wiadomości"
+        description = "Contact request payload containing sender’s details and message content."
 )
 public class ContactRequestDTO {
     @Schema(
-            description = "Imię i nazwisko nadawcy wiadomości",
-            example     = "Jan Kowalski",
+            description = "Sender’s full name",
+            example     = "John Doe",
             required    = true
     )
     private String name;
     @Schema(
-            description = "Adres e-mail nadawcy, na który można wysłać odpowiedź",
-            example     = "jan.kowalski@example.com",
+            description = "Sender’s email address to receive a response",
+            example     = "john.doe@example.com",
             required    = true,
             format      = "email"
     )
     private String email;
     @Schema(
-            description = "Temat wiadomości kontaktowej",
-            example     = "Pytanie o ofertę VIP",
+            description = "Subject of the contact message",
+            example     = "Inquiry about VIP package",
             required    = true
     )
     private String subject;
     @Schema(
-            description = "Treść wiadomości kontaktowej",
-            example     = "Dzień dobry, chciałbym uzyskać więcej informacji na temat waszej oferty VIP.",
+            description = "Content of the contact message",
+            example     = "Hello, I would like more information about your VIP package.",
             required    = true
     )
     private String message;

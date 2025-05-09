@@ -35,58 +35,60 @@ public class UserController {
         this.kafkaProducerService = kafkaProducerService;
     }
 
-    @Operation(summary = "Rejestracja nowego użytkownika",
-            description = "Rejestracja nowego użytkownika, po rejestracji wymagane logowanie oraz wysyłany jest email powitalny")
+    @Operation(
+            summary     = "Register a new user",
+            description = "Registers a new user; requires login after registration and sends a welcome email."
+    )
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "User registered successfully"),
-        @ApiResponse(responseCode = "400", description = "User registration failed"),
-        @ApiResponse(responseCode = "500", description = "An exception occured")
+            @ApiResponse(responseCode = "201", description = "User registered successfully"),
+            @ApiResponse(responseCode = "400", description = "User registration failed"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDTO registerRequest) {
-        logger.info("POST /register – próba rejestracji użytkownika o emailu={}", registerRequest.getEmail());
+        logger.info("POST /register – attempt to register user with email={}", registerRequest.getEmail());
         try {
             Customer savedUser = customerService.save(registerRequest);
             if (savedUser.getId()>0){
-                logger.debug("Użytkownik zapisany z ID={} – wysyłam event do Kafki", savedUser.getId());
+                logger.debug("User saved with ID={} – sending UserRegistered event to Kafka", savedUser.getId());
                 kafkaProducerService.sendUserRegisteredEvent(new UserRegisteredEvent(registerRequest.getEmail(), savedUser.getId()));
                 return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
             }else {
-                logger.warn("Rejestracja nie powiodła się – save() zwróciło ID<=0 dla emailu={}", registerRequest.getEmail());
+                logger.warn("Registration failed – save() returned ID<=0 for email={}", registerRequest.getEmail());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User registration failed");
             }
         }catch (Exception e){
-            logger.error("Wystąpił wyjątek podczas rejestracji użytkownika email={}:", registerRequest.getEmail(), e);
+            logger.error("Exception occurred while registering user email={}:", registerRequest.getEmail(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An exception occured: " + e.getMessage());
         }
 
     }
     @PostMapping("/login")
     @Operation(
-            summary     = "Logowanie użytkownika",
-            description = "Przyjmuje nazwę użytkownika i hasło, zwraca nagłówek z tokenem JWT i ciało z tokenem"
+            summary     = "User login",
+            description = "Accepts username and password and returns a JWT token in both the response header and body."
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description  = "Logowanie udane, w nagłówku `" + ApplicationConstants.JWT_HEADER + "` zwrócono token",
+                    description  = "Login successful; JWT token returned in header `" + ApplicationConstants.JWT_HEADER + "`",
                     content      = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema    = @Schema(implementation = LoginResponseDTO.class)
                     )
             ),
-            @ApiResponse(responseCode = "401", description = "Nieprawidłowe dane logowania"),
-            @ApiResponse(responseCode = "500", description = "Wewnętrzny błąd serwera")
+            @ApiResponse(responseCode = "401", description = "Invalid login credentials"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<LoginResponseDTO> apiLogin (@io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Dane logowania: username oraz password",
+            description = "Login data: username and password",
             required    = true,
             content     = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema    = @Schema(implementation = LoginRequestDTO.class)
             )
     )@RequestBody LoginRequestDTO loginRequest) {
-        logger.info("POST /login – próba logowania user={}", loginRequest.username());
+        logger.info("POST /login – attempt to login user={}", loginRequest.username());
         String jwt = customerService.generateJWTToken(loginRequest.username(), loginRequest.password());
         return ResponseEntity.status(HttpStatus.OK).header(ApplicationConstants.JWT_HEADER,jwt)
                 .body(new LoginResponseDTO(HttpStatus.OK.getReasonPhrase(), jwt));

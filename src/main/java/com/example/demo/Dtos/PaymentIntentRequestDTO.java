@@ -12,20 +12,23 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "CreatePaymentIntentRequest", description = "Parametry inicjacji płatności Stripe")
+@Schema(
+        name        = "CreatePaymentIntentRequest",
+        description = "Parameters for initializing a Stripe payment."
+)
 public class PaymentIntentRequestDTO {
     @Schema(
-            description = "Kwota do zapłaty w najniższej jednostce waluty (np. grosze/centy)",
-            example = "5000",
-            required = true
+            description = "Amount to be paid in the smallest currency unit (e.g., cents)",
+            example     = "5000",
+            required    = true
     )
     @Min(value = 1, message = "Amount musi być co najmniej 1")
     private Long amount;
 
     @Schema(
-            description = "Waluta płatnosci USD)",
-            example = "USD",
-            required = true
+            description = "Payment currency (e.g., USD)",
+            example     = "USD",
+            required    = true
     )
     @NotBlank(message = "Currency jest wymagane")
     private String currency;

@@ -16,11 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 @Schema(
         name        = "BetRequest",
-        description = "Dane potrzebne do złożenia zakładu: kwota i lista wyborów"
+        description = "Data required to place a bet: amount and list of selections."
 )
 public class BetRequest {
     @Schema(
-            description = "Całkowita kwota zakładu w walucie konta (np. 100.00)",
+            description = "Total amount to stake in the account currency (e.g., 50.00)",
             example     = "50.00",
             required    = true
     )
@@ -28,7 +28,7 @@ public class BetRequest {
     @ArraySchema(
             schema      = @Schema
                     (implementation = BetSelectionRequest.class,
-                    description = "Lista poszczególnych wyborów w ramach zakładu (np. wynik meczu, over/under itp.)",
+                    description = "List of individual selections within the bet (e.g., match result, over/under, etc.)",
                     required    = true),
             minItems    = 1
     )

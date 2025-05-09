@@ -15,38 +15,38 @@ import java.util.Date;
 @Setter
 @Schema(
         name        = "InternalEventDTO",
-        description = "Reprezentuje pojedyncze wydarzenie sportowe dostępne do obstawiania"
+        description = "Represents a single sports event available for betting."
 )
 public class InternalEventDTO {
     @Schema(
-            description = "Unikalne ID wydarzenia zewnętrznego serwisu",
+            description = "Unique identifier of the event from the external service",
             example     = "evt_12345"
     )
     private String eventId;
     @Schema(
-            description = "Klucz sportu (np. 'soccer', 'basketball')",
+            description = "Sport key (e.g., 'soccer', 'basketball')",
             example     = "soccer"
     )
     private String sportKey;
     @Schema(
-            description = "Pełna nazwa sportu",
+            description = "Full name of the sport",
             example     = "Football"
     )
     private String sportTitle;
     @Schema(
-            description = "Data i godzina rozpoczęcia wydarzenia (UTC)",
+            description = "Start date and time of the event (UTC)",
             type        = "string",
             format      = "date-time",
             example     = "2025-05-06T18:00:00Z"
     )
     private Date startTime;
     @Schema(
-            description = "Nazwa drużyny gospodarzy",
+            description = "Name of the home team",
             example     = "FC Barcelona"
     )
     private String homeTeam;
     @Schema(
-            description = "Kurs na zwycięstwo drużyny gospodarzy",
+            description = "Odds for the home team to win",
             example     = "1.85"
     )
     private String homeTeamOdds;
@@ -56,22 +56,22 @@ public class InternalEventDTO {
     )
     private String awayTeam;
     @Schema(
-            description = "Kurs na zwycięstwo drużyny gości",
+            description = "Odds for the away team to win",
             example     = "2.10"
     )
     private String awayTeamOdds;
     @Schema(
-            description = "Kurs na remis",
+            description = "Odds for a draw",
             example     = "3.50"
     )
     private String drawOdds;
     @Schema(
-            description = "Aktualny status wydarzenia",
-            implementation = Result.class
+            description = "Odds for a draw",
+            example     = "3.50"
     )
     private Result status;
     @Schema(
-            description = "Flaga informująca, czy wydarzenie jest zakończone",
+            description = "Flag indicating whether the event is completed",
             example     = "false"
     )
     private boolean completed;

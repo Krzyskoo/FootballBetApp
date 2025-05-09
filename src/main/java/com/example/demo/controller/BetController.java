@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -36,13 +35,13 @@ public class BetController {
     @PostMapping("/bets/place")
     @SecurityRequirement(name = "JWT")
     @Operation(
-            summary     = "Złóż nowy zakład",
-            description = "Umożliwia użytkownikowi postawienie zakładu na wybrany mecz"
+            summary     = "Place a new bet",
+            description = "Allows the authenticated user to place a bet on a selected match."
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
-                    description  = "Zakład został pomyślnie utworzony",
+                    description  = "Bet successfully created",
                     content      = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema    = @Schema(implementation = Bet.class)
@@ -50,30 +49,34 @@ public class BetController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description  = "Nieprawidłowe dane wejściowe",
+                    description  = "Invalid input data",
                     content      = @Content(schema = @Schema())
             ),
             @ApiResponse(
                     responseCode = "500",
-                    description  = "Wewnętrzny błąd serwera",
+                    description  = "Internal server error",
                     content      = @Content(schema = @Schema())
             )
     })
-    public ResponseEntity<BetDTO> placeBet(@Validated @RequestBody BetRequest betRequest) {
+    public ResponseEntity<BetDTO> placeBet(
+            @Validated @RequestBody BetRequest betRequest
+    ) {
         Bet createdBet = betService.createBet(betRequest);
         BetDTO createdBetDTO = betMapper.toBetDTO(createdBet);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdBetDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(createdBetDTO);
     }
+
     @GetMapping("/bets")
     @SecurityRequirement(name = "JWT")
     @Operation(
-            summary     = "Pobierz zakłady użytkownika",
-            description = "Zwraca listę wszystkich zakładów złożonych aktualnie zalogowanym użytkownikiem"
+            summary     = "Get user bets",
+            description = "Returns a list of all bets placed by the currently authenticated user."
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description  = "Lista zakładów użytkownika",
+                    description  = "List of user's bets",
                     content      = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array       = @ArraySchema(schema = @Schema(implementation = BetDTO.class))
@@ -81,12 +84,13 @@ public class BetController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description  = "Brak autoryzacji",
+                    description  = "Unauthorized",
                     content      = @Content(schema = @Schema())
             )
     })
-    public ResponseEntity<List<BetDTO>> getBetsCreatedByUser(){
-        return ResponseEntity.status(HttpStatus.OK).body(betService.getBetsCreatedByUser());
+    public ResponseEntity<List<BetDTO>> getBetsCreatedByUser() {
+        List<BetDTO> bets = betService.getBetsCreatedByUser();
+        return ResponseEntity.ok(bets);
     }
 
 }

@@ -15,31 +15,31 @@ import java.util.List;
 @Setter
 @Schema(
         name        = "BetDTO",
-        description = "Reprezentuje złożony zakład wraz z jego szczegółami"
+        description = "Represents a placed bet along with its details."
 )
 public class BetDTO {
-    @Schema(description = "Unikalne ID zakładu", example = "42")
+    @Schema(description = "Unique identifier of the bet", example = "42")
     private Long betId;
     @Schema(description = "Łączne kursy mnożące stake", example = "3.75")
     private BigDecimal totalOdds;
-    @Schema(description = "Postawiona kwota (stake)", example = "100.00")
+    @Schema(description = "Combined odds multiplier applied to the stake", example = "100.00")
     private BigDecimal stake;
     @Schema(
-            description = "Status zakładu, status jest automatycznie przydziany po utworzeniu i w trakcie przetwarzania zakładu",
+            description = "Current status of the bet. Automatically assigned upon creation and updated during processing",
             example     = "OPEN",
             allowableValues = {"WON", "LOST", "Pending" }
     )
     private String status;
-    @Schema(description = "Potencjalna wygrana (stake × totalOdds)", example = "375.00")
+    @Schema(description = "Potential winning amount (stake × totalOdds)", example = "375.00")
     private BigDecimal winAmount;
     @ArraySchema(
             schema      = @Schema(implementation = BetSelectionDTO.class,
-                    description = "Szczegóły poszczególnych wyborów w zakładzie")
+                    description = "Details of each selection included in the bet")
 
     )
     private List<BetSelectionDTO> selections;
     @Schema(
-            description = "Data utworzenia zakładu",
+            description = "Timestamp when the bet was created",
             example     = "2025-05-01T14:30:00Z",
             type        = "string",
             format      = "date-time"

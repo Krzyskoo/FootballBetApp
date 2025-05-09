@@ -28,18 +28,23 @@ public class EventController {
     @GetMapping("/bet/events")
     @SecurityRequirement(name = "JWT")
     @Operation(
-            summary     = "Pobierz listę wydarzeń",
-            description = "Zwraca listę wszystkich nieukończonych wydarzeń dostępnych do obstawiania"
+            summary     = "Get list of events",
+            description = "Returns a list of all non-completed events available for betting."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Lista wydarzeń zwrócona pomyślnie"),
-            @ApiResponse(responseCode = "500", description = "Wewnętrzny błąd serwera")
+            @ApiResponse(
+                    responseCode = "200",
+                    description  = "Events retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description  = "Internal server error"
+            )
     })
     public ResponseEntity<List<InternalEventDTO>> getEvents() {
         log.info("Getting events to place a bet");
         List<Event> events = eventService.getAllNonCompletedEvents();
         List<InternalEventDTO> dtos = eventMapper.toDtoList(events);
         return ResponseEntity.ok(dtos);
-
     }
 }

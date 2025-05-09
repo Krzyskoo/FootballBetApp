@@ -20,7 +20,7 @@ public class KafkaProducerService {
 
     public void sendUserRegisteredEvent(UserRegisteredEvent event) {
         if (!kafkaEnabled) {
-            // w testach nic nie robimy
+
             return;
         }
         try {
