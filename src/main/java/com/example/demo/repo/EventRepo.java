@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Repository
@@ -33,4 +33,10 @@ public interface EventRepo extends JpaRepository<Event, String> {
                             @Param("homeOdds") String homeOdds,
                             @Param("awayOdds") String awayOdds,
                             @Param("drawOdds") String drawOdds);
+
+    @Query(
+            value = "SELECT DISTINCT sport_key, sport_title FROM event",
+            nativeQuery = true
+    )
+    Set<Object> getUniqueSportKeyAndSportTitle();
 }
