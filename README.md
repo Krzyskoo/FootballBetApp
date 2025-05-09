@@ -83,30 +83,42 @@ Swagger UI: http://localhost:8080/swagger-ui/index.html
 Kafka UI (if enabled): http://localhost:8181
 
 5**Configuration**
-# Database (MySQL default)
+Database (MySQL default)
 spring.datasource.url=jdbc:mysql://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/${DATABASE_NAME:FootballDatabase}
 spring.datasource.username=${DATABASE_USERNAME:root}
 spring.datasource.password=${DATABASE_PASSWORD:root}
 spring.jpa.hibernate.ddl-auto=update
 
-# Server
+Server
 server.port=8080
 
-# JWT & Security
-# (e.g.) jwt.secret=${JWT_SECRET:your_jwt_secret}
+JWT & Security
+(e.g.) jwt.secret=${JWT_SECRET:your_jwt_secret}
 
-# Stripe
+Stripe
 StripeKey=${STRIPE_SECRET_KEY:sk_test_xxx}
 stripe.webhook.secret=${STRIPE_WEBHOOK_SECRET:whsec_xxx}
 
-# SendGrid
-# SENDGRID_API_KEY in env
+SendGrid
+SENDGRID_API_KEY in env
 
-# Kafka
+Kafka
 spring.kafka.bootstrap-servers=${KAFKA_BROKER:localhost:9092}
 app.kafka.enabled=true
 app.kafka.user-topic=user-registered
-app.kafka.bet-topic=bet-placed
 
+6**API Usage (Endpoints Guide)**
+Explore full API in Swagger UI api-documentation.pdf. 
 
+7**Database Structure** 
+![database](https://github.com/user-attachments/assets/37c5d94c-e695-4a94-a75f-479ac2b386c1)
+
+Contact Information
+Author: Krzyskoo
+
+GitHub: github.com/Krzyskoo/FootballBetApp
+
+Email:krzysztof_kandyba@o2.pl
+
+LinkedIn: [https://www.linkedin.com/in/yourprofile](https://www.linkedin.com/in/krzysztof-kandyba-633914213/)
 
