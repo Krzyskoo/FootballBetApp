@@ -109,9 +109,12 @@ app.kafka.enabled=true
 app.kafka.user-topic=user-registered
 
 6**API Usage (Endpoints Guide)**
-Explore full API in Swagger UI api-documentation.pdf. 
+Explore full API in Swagger UI api-documentation.pdf.
 
-7**Database Structure** 
+7 **Demo**
+[![Watch the demo]](https://www.youtube.com/watch?v=qMXcCEsQ9MA&ab_channel=Krzy%C5%9Bko)
+
+8**Database Structure** 
 ![database](https://github.com/user-attachments/assets/37c5d94c-e695-4a94-a75f-479ac2b386c1)
 
 Contact Information
