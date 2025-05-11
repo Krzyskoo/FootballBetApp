@@ -53,6 +53,42 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+    @ExceptionHandler(BetsNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleBetsNotFound(BetsNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", e.getMessage()));
+    }
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleCustomerNotFound(CustomerNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", e.getMessage()));
+    }
+    @ExceptionHandler(InvalidResultPredictedException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidResultPredicted(InvalidResultPredictedException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", e.getMessage()));
+    }
+    @ExceptionHandler(EventNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleEventNotFound(EventNotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", e.getMessage()));
+    }
+    @ExceptionHandler(InsufficientFundsException.class)
+    public ResponseEntity<Map<String, String>> handleInsufficientFunds(InsufficientFundsException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", e.getMessage()));
+    }
+    @ExceptionHandler(EventAlreadyStartedException.class)
+    public ResponseEntity<Map<String, String>> handleEventAlreadyStarted(EventAlreadyStartedException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", e.getMessage()));
+    }
 
 
 

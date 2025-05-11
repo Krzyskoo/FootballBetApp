@@ -3,6 +3,7 @@ package com.example.demo.services;
 import com.example.demo.dtos.BetDTO;
 import com.example.demo.dtos.BetRequest;
 import com.example.demo.dtos.BetSelectionRequest;
+import com.example.demo.exceptions.*;
 import com.example.demo.mapper.BetMapper;
 import com.example.demo.model.*;
 import com.example.demo.proxy.SportApiProxy;
@@ -41,15 +42,17 @@ public class BetService {
     @Transactional
     public Bet createBet(BetRequest betRequest) {
         Customer customer = customerRepo.findById(customerService.getAuthenticatedUsername()).orElseThrow(
-                () -> new IllegalArgumentException("Customer not found")
+                () -> new CustomerNotFoundException("Customer not found")
         );
-        if (customer.getBalance().compareTo(betRequest.getAmount()) < 0) throw new IllegalArgumentException("Insufficient balance");
+        if (customer.getBalance().compareTo(betRequest.getAmount()) < 0) throw new InsufficientFundsException("Insufficient balance: "
+                + customer.getBalance() +"required: " + betRequest.getAmount());
+
         List<BetSelection> selections = new ArrayList<>();
         BigDecimal totalOdds = BigDecimal.ONE;
         for (BetSelectionRequest betSelectionRequest : betRequest.getSelections()){
             Event event = eventRepo.findById(betSelectionRequest.getEventId()).orElseThrow(
-                    () -> new IllegalArgumentException("Event not found"));
-            if (event.getStartTime().before(new java.util.Date())) throw new IllegalArgumentException("Event has already started");
+                    () -> new EventNotFoundException("Event not found: " + betSelectionRequest.getEventId()));
+            if (event.getStartTime().before(new java.util.Date())) throw new EventAlreadyStartedException("Event has already started: " + betSelectionRequest.getEventId());
 
 
             BigDecimal odds = getOdds(event,betSelectionRequest.getPredictedResult());
@@ -83,7 +86,7 @@ public class BetService {
             case HOME_WIN -> new BigDecimal(event.getHomeTeamOdds());
             case AWAY_WIN -> new BigDecimal(event.getAwayTeamOdds());
             case DRAW -> new BigDecimal(event.getDrawOdds());
-            default -> throw new IllegalArgumentException("Invalid predicted result");
+            default -> throw new InvalidResultPredictedException("Invalid predicted result: " + predictedResult);
         };
     }
 
@@ -111,13 +114,13 @@ public class BetService {
     public void updateBalanceAfterBetWin(Bet bet) {
         log.info("Updating balance after bet win");
         Customer customer = customerRepo.findById(bet.getUser().getId()).orElseThrow(
-                () -> new IllegalArgumentException("Customer not found")
+                () -> new CustomerNotFoundException("Customer not found")
         );
         balanceHistoryService.saveBalanceChange(customer,TransactionType.BET_WON,bet.getWinAmount(),"Bet won" );
     }
     public List<BetDTO> getBetsCreatedByUser(){
         List<Bet> bets = betRepo.findAllByUserId(customerService.getAuthenticatedUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Bets not found"));
+                .orElseThrow(() -> new BetsNotFoundException("Bets not found for user: " + customerService.getAuthenticatedUsername()));
         return betMapper.toDtoList(bets).stream().sorted(Comparator.comparing(BetDTO::getCreatedDt).reversed()).toList();
 
     }
