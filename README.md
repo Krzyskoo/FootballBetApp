@@ -51,7 +51,8 @@ This project was created to explore and demonstrate building a full-stack bettin
 - **JUnit 5 & Mockito** for testing  
 - **Maven** for build and dependency management  
 - **Docker & Docker Compose** for containers  
-- **GitHub Actions** for CI/CD  
+- **GitHub Actions** for CI/CD
+- **Angular** for frontend
 
 ## System Architecture
 
