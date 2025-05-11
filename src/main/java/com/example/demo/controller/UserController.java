@@ -122,7 +122,7 @@ public class UserController {
                     content      = @Content(schema = @Schema())
             )
     })
-    public ResponseEntity<CustomerDTO> securedEndpoint() {
+    public ResponseEntity<CustomerDTO> getCustomerDetails() {
         log.info("Fetching current authenticated customer");
         return ResponseEntity.status(HttpStatus.OK).body(customerService.getCustomer());
     }

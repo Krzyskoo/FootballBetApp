@@ -2,6 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.dtos.BetRequest;
 import com.example.demo.dtos.BetSelectionRequest;
+import com.example.demo.exceptions.EventAlreadyStartedException;
+import com.example.demo.exceptions.EventNotFoundException;
+import com.example.demo.exceptions.InsufficientFundsException;
 import com.example.demo.mapper.BetMapper;
 import com.example.demo.model.*;
 import com.example.demo.proxy.SportApiProxy;
@@ -120,7 +123,7 @@ public class BetServiceTest {
         when(customerService.getAuthenticatedUsername()).thenReturn(userId);
         when(customerRepo.findById(userId)).thenReturn(Optional.of(customer));
 
-        assertThrows(IllegalArgumentException.class, () -> betService.createBet(betRequest));
+        assertThrows(InsufficientFundsException.class, () -> betService.createBet(betRequest));
     }
 
     @Test
@@ -138,7 +141,7 @@ public class BetServiceTest {
         when(customerRepo.findById(userId)).thenReturn(Optional.of(customer));
         when(eventRepo.findById(eventId)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> betService.createBet(betRequest));
+        assertThrows(EventNotFoundException.class, () -> betService.createBet(betRequest));
     }
     @Test
     void shouldThrowWhenEventAlreadyStarted() {
@@ -163,7 +166,7 @@ public class BetServiceTest {
         when(customerRepo.findById(userId)).thenReturn(Optional.of(customer));
         when(eventRepo.findById(eventId)).thenReturn(Optional.of(event));
 
-        assertThrows(IllegalArgumentException.class, () -> betService.createBet(betRequest));
+        assertThrows(EventAlreadyStartedException.class, () -> betService.createBet(betRequest));
     }
 
     public BetSelectionRequest createBetSelectionRequest(String eventId, Result predictedResult){
