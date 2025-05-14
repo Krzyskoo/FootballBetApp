@@ -1,6 +1,6 @@
 # FootballBetApp
 
-**FootballBetApp** is a Spring Boot powered web application that simulates an online football betting platform. It provides a RESTful API for users to register, authenticate, deposit funds, and place bets on football matches, while administrators can manage matches and oversee bets. The project showcases a robust backend architecture with secure authentication, data persistence, third-party integrations, and documentation, making it ideal for demonstration in a CV or portfolio.
+**FootballBetApp** is a Spring Boot powered web application that simulates an online football betting platform. It provides a RESTful API for users to register, authenticate, deposit funds, and place bets on football matches, while administrators can manage matches and oversee bets.
 
 ## Table of Contents
 
